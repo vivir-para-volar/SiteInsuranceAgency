@@ -1,0 +1,75 @@
+﻿@model IEnumerable<InsuranceAgency.Models.Policy>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Добавить новый", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Car.Model)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Employee.FullName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Policyholder.FullName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.InsuranceType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.InsurancePremium)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.InsuranceAmount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateOfConclusion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ExpirationDate)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Car.Model)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Employee.FullName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Policyholder.FullName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.InsuranceType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.InsurancePremium)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.InsuranceAmount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateOfConclusion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ExpirationDate)
+        </td>
+        <td>
+            @Html.ActionLink("Редактировать", "Edit", new { id=item.ID }) |
+            @Html.ActionLink("Подробнее", "Details", new { id=item.ID }) |
+            @Html.ActionLink("Удалить", "Delete", new { id=item.ID })
+        </td>
+    </tr>
+}
+
+</table>

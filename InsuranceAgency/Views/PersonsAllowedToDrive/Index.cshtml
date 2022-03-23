@@ -1,0 +1,39 @@
+﻿@model IEnumerable<InsuranceAgency.Models.PersonAllowedToDrive>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Список лиц, допущенных к управлению</h2>
+
+<p>
+    @Html.ActionLink("Добавить новое", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FullName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DrivingLicence)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.FullName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DrivingLicence)
+        </td>
+        <td>
+            @Html.ActionLink("Редактировать", "Edit", new { id=item.ID }) |
+            @Html.ActionLink("Подробнее", "Details", new { id=item.ID }) |
+            @Html.ActionLink("Удалить", "Delete", new { id=item.ID })
+        </td>
+    </tr>
+}
+
+</table>

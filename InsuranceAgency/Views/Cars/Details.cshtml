@@ -1,0 +1,49 @@
+﻿@model InsuranceAgency.Models.Car
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Подробнее об автомобиле</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Model)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Model)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.VIN)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.VIN)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RegistrationPlate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RegistrationPlate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.VehiclePassport)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.VehiclePassport)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Редактировать", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Вернуться к списку", "Index")
+</p>

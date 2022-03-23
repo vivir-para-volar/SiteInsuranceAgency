@@ -1,0 +1,87 @@
+﻿@model InsuranceAgency.Models.Policy
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Удаление полиса</h2>
+
+<h3>Вы уверены, что хотите удалить данный полис?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Car.Model)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Car.Model)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Employee.FullName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Employee.FullName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Policyholder.FullName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Policyholder.FullName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.InsuranceType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.InsuranceType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.InsurancePremium)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.InsurancePremium)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.InsuranceAmount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.InsuranceAmount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DateOfConclusion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DateOfConclusion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ExpirationDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ExpirationDate)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Удалить" class="btn btn-default" /> |
+            @Html.ActionLink("Вернуться к списку", "Index")
+        </div>
+    }
+</div>

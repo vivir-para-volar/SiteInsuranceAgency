@@ -1,0 +1,49 @@
+﻿@model InsuranceAgency.Models.InsuranceEvent
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Подробнее о страховом случае</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.InsurancePayment)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.InsurancePayment)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PolicyID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PolicyID)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Редактировать", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Вернуться к списку", "Index")
+</p>
