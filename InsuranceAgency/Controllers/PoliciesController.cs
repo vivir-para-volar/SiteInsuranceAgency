@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using InsuranceAgency.Models;
 
@@ -28,7 +24,11 @@ namespace InsuranceAgency.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Policy policy = db.Policies.Find(id);
+            Policy policy = db.Policies
+                                .Include(p => p.Car)
+                                .Include(p => p.Employee)
+                                .Include(p => p.Policyholder)
+                                .First(p => p.ID == id);
             if (policy == null)
             {
                 return HttpNotFound();
@@ -109,7 +109,10 @@ namespace InsuranceAgency.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Policy policy = db.Policies.Find(id);
+            Policy policy = db.Policies.Include(p => p.Car)
+                                       .Include(p => p.Employee)
+                                       .Include(p => p.Policyholder)
+                                       .First(p => p.ID == id);
             if (policy == null)
             {
                 return HttpNotFound();

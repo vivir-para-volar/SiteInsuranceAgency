@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using InsuranceAgency;
 using InsuranceAgency.Models;
 
 namespace InsuranceAgency.Controllers
@@ -39,6 +34,7 @@ namespace InsuranceAgency.Controllers
         // GET: InsuranceEvents/Create
         public ActionResult Create()
         {
+            ViewBag.PolicyID = new SelectList(db.Policies, "ID", "ID");
             return View();
         }
 
@@ -56,6 +52,7 @@ namespace InsuranceAgency.Controllers
                 return RedirectToAction("Index");
             }
 
+            ViewBag.PolicyID = new SelectList(db.Policies, "ID", "ID", insuranceEvent.PolicyID);
             return View(insuranceEvent);
         }
 
@@ -71,6 +68,7 @@ namespace InsuranceAgency.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.PolicyID = new SelectList(db.Policies, "ID", "ID", insuranceEvent.PolicyID);
             return View(insuranceEvent);
         }
 
@@ -87,6 +85,7 @@ namespace InsuranceAgency.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            ViewBag.PolicyID = new SelectList(db.Policies, "ID", "ID", insuranceEvent.PolicyID);
             return View(insuranceEvent);
         }
 
