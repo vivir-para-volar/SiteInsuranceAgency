@@ -16,6 +16,7 @@ namespace InsuranceAgency.Models
         [Display(Name = "Водительское удостоверение")]
         [Required(ErrorMessage = "Введите Водительское удостоверение")]
         [StringLength(10, MinimumLength = 10, ErrorMessage = "Водительское удостоверение должно содержать 10 цифр")]
+        [RegularExpression(@"^[0-9]*$", ErrorMessage = "Данное поле может включать только цифры")]
         public string DrivingLicence { get; set; }
 
         public ICollection<Policy> Policies { get; set; }

@@ -46,8 +46,6 @@ namespace InsuranceAgency.Controllers
         }
 
         // POST: Policies/Create
-        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        // сведения см. в разделе https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ID,InsuranceType,InsurancePremium,InsuranceAmount,DateOfConclusion,ExpirationDate,PolicyholderID,CarID,EmployeeID")] Policy policy)
@@ -58,10 +56,6 @@ namespace InsuranceAgency.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
-            ViewBag.CarID = new SelectList(db.Car, "ID", "Model", policy.CarID);
-            ViewBag.EmployeeID = new SelectList(db.Employees, "ID", "FullName", policy.EmployeeID);
-            ViewBag.PolicyholderID = new SelectList(db.Policyholders, "ID", "FullName", policy.PolicyholderID);
             return View(policy);
         }
 
@@ -84,8 +78,6 @@ namespace InsuranceAgency.Controllers
         }
 
         // POST: Policies/Edit/5
-        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        // сведения см. в разделе https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ID,InsuranceType,InsurancePremium,InsuranceAmount,DateOfConclusion,ExpirationDate,PolicyholderID,CarID,EmployeeID")] Policy policy)
@@ -96,9 +88,6 @@ namespace InsuranceAgency.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.CarID = new SelectList(db.Car, "ID", "Model", policy.CarID);
-            ViewBag.EmployeeID = new SelectList(db.Employees, "ID", "FullName", policy.EmployeeID);
-            ViewBag.PolicyholderID = new SelectList(db.Policyholders, "ID", "FullName", policy.PolicyholderID);
             return View(policy);
         }
 

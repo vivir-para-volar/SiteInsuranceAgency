@@ -1,0 +1,59 @@
+﻿@model IEnumerable<InsuranceAgency.Models.Policyholder>
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Добавление полюса</h2>
+
+<h3>Выберите страхователя</h3>
+
+<div class="form-group">
+    @Html.ActionLink("Создать нового", "Create", "Policyholders", null, new { @class = "btn btn-info" })
+</div>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FullName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Birthday)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Telephone)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Passport)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Birthday)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Telephone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Passport)
+            </td>
+            <td>
+                @using (Html.BeginForm())
+                {
+                    <div>
+                        @Html.Hidden("PolicyholderID", item.ID)
+                        <input type="submit" value="Выбрать" class="btn btn-primary" />
+                    </div>
+                }
+            </td>
+        </tr>
+    }
+
+</table>
+

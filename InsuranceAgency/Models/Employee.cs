@@ -22,11 +22,13 @@ namespace InsuranceAgency.Models
         [Display(Name = "Телефон")]
         [Required(ErrorMessage = "Введите Телефон")]
         [MaxLength(15, ErrorMessage = "Телефон не должен превышать 15 цифр")]
+        [RegularExpression(@"^[0-9]*$", ErrorMessage = "Данное поле может включать только цифры")]
         public string Telephone { get; set; }
 
         [Display(Name = "Паспорт")]
         [Required(ErrorMessage = "Введите Паспорт")]
         [StringLength(10, MinimumLength = 10, ErrorMessage = "Пасспорт должен содержать 10 цифр")]
+        [RegularExpression(@"^[0-9]*$", ErrorMessage = "Данное поле может включать только цифры")]
         public string Passport { get; set; }
 
         [Display(Name = "Логин")]

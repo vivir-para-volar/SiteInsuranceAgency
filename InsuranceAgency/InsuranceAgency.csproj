@@ -127,6 +127,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\CreatePolicyController.cs" />
     <Compile Include="Controllers\CarsController.cs" />
     <Compile Include="Controllers\EmployeesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -244,6 +245,10 @@
     <Content Include="Views\Policies\Details.cshtml" />
     <Content Include="Views\Policies\Edit.cshtml" />
     <Content Include="Views\Policies\Index.cshtml" />
+    <Content Include="Views\CreatePolicy\Index.cshtml" />
+    <Content Include="Views\CreatePolicy\ChooseCar.cshtml" />
+    <Content Include="Views\CreatePolicy\ChooseEmployee.cshtml" />
+    <Content Include="Views\CreatePolicy\ChooseInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

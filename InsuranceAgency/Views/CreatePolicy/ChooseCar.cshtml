@@ -1,0 +1,67 @@
+﻿@model IEnumerable<InsuranceAgency.Models.Car>
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Добавление полюса</h2>
+
+<div class="form-group">
+    @Html.Label("Страхователь", htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.Label(ViewBag.Policyholder.FullName as string, htmlAttributes: new { @class = "control-label" })
+    </div>
+</div>
+
+<h3>Выберите автомобиль</h3>
+
+<div class="form-group">
+    @Html.ActionLink("Создать новый", "Create", "Cars", null, new { @class = "btn btn-info" })
+</div>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Model)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.VIN)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RegistrationPlate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.VehiclePassport)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Model)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VIN)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RegistrationPlate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VehiclePassport)
+            </td>
+            <td>
+                @using (Html.BeginForm("ChooseCar", "CreatePolicy", FormMethod.Post))
+                {
+                    <div>
+                        @Html.Hidden("PolicyholderID", ViewBag.Policyholder.ID as string)
+                        @Html.Hidden("CarID", item.ID)
+                        <input type="submit" value="Выбрать" class="btn btn-primary" />
+                    </div>
+                }
+            </td>
+        </tr>
+    }
+
+</table>
+
