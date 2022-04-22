@@ -1,0 +1,60 @@
+﻿@model IEnumerable<InsuranceAgency.Models.PersonAllowedToDrive>
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Добавление полюса</h2>
+
+<h3>Выберите лиц, допущенных к управлению</h3>
+
+<div class="form-group">
+    @Html.ActionLink("Добавить новое", "Create", "PersonsAllowedToDrive", null, new { @class = "btn btn-info" })
+</div>
+
+@using (Html.BeginForm("ChoosePersonsAllowedToDrive", "CreatePolicy", FormMethod.Post))
+{
+    @Html.Hidden("PolicyID", ViewBag.PolicyID as string)
+
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FullName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DrivingLicence)
+            </th>
+            <th></th>
+        </tr>
+
+        @{
+            int i = 0;
+        }
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DrivingLicence)
+                </td>
+                <td>
+                    <div>
+                        @Html.Hidden($"personsAllowedToDriveChecked[{i}].PersonAllowedToDriveID", item.ID)
+                        @Html.CheckBox($"personsAllowedToDriveChecked[{i}].Check", false, new { @class = "form-check-input" })
+                    </div>
+                </td>
+            </tr>
+            i++;
+        }
+    </table>
+
+    @Html.ValidationMessage("Error", "", new { @class = "text-danger" })
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Добавить" class="btn btn-default" />
+        </div>
+    </div>
+}

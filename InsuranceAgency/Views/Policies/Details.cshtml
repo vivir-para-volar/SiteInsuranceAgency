@@ -10,30 +10,6 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Car.Model)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Car.Model)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Employee.FullName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Employee.FullName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Policyholder.FullName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Policyholder.FullName)
-        </dd>
-
-        <dt>
             @Html.DisplayNameFor(model => model.InsuranceType)
         </dt>
 
@@ -71,6 +47,30 @@
 
         <dd>
             @Html.DisplayFor(model => model.ExpirationDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Страхователь")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Policyholder.FullName)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Автомобиль")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Car.Model)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Сотрудник")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Employee.FullName)
         </dd>
 
     </dl>

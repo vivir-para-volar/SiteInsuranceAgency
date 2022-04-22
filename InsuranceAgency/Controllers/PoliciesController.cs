@@ -56,6 +56,9 @@ namespace InsuranceAgency.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            ViewBag.CarID = new SelectList(db.Car, "ID", "Model");
+            ViewBag.EmployeeID = new SelectList(db.Employees, "ID", "FullName");
+            ViewBag.PolicyholderID = new SelectList(db.Policyholders, "ID", "FullName");
             return View(policy);
         }
 
@@ -66,14 +69,15 @@ namespace InsuranceAgency.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Policy policy = db.Policies.Find(id);
+            Policy policy = db.Policies
+                                .Include(p => p.Car)
+                                .Include(p => p.Employee)
+                                .Include(p => p.Policyholder)
+                                .First(p => p.ID == id);
             if (policy == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.CarID = new SelectList(db.Car, "ID", "Model", policy.CarID);
-            ViewBag.EmployeeID = new SelectList(db.Employees, "ID", "FullName", policy.EmployeeID);
-            ViewBag.PolicyholderID = new SelectList(db.Policyholders, "ID", "FullName", policy.PolicyholderID);
             return View(policy);
         }
 
@@ -88,7 +92,12 @@ namespace InsuranceAgency.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(policy);
+            Policy policyError = db.Policies
+                                .Include(p => p.Car)
+                                .Include(p => p.Employee)
+                                .Include(p => p.Policyholder)
+                                .First(p => p.ID == policy.ID);
+            return View(policyError);
         }
 
         // GET: Policies/Delete/5

@@ -172,6 +172,7 @@
     <Compile Include="Models\Photo.cs" />
     <Compile Include="Models\Policy.cs" />
     <Compile Include="Models\Policyholder.cs" />
+    <Compile Include="Models\ViewModels\PersonsAllowedToDriveCheck.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -249,6 +250,7 @@
     <Content Include="Views\CreatePolicy\ChooseCar.cshtml" />
     <Content Include="Views\CreatePolicy\ChooseEmployee.cshtml" />
     <Content Include="Views\CreatePolicy\ChooseInfo.cshtml" />
+    <Content Include="Views\CreatePolicy\ChoosePersonsAllowedToDrive.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
