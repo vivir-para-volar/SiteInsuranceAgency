@@ -1,4 +1,4 @@
-﻿namespace CourseWork.Models.ViewModels
+﻿namespace InsuranceAgency.Models.ViewModels
 {
     public class PersonsAllowedToDriveCheck
     {

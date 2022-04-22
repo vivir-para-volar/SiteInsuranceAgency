@@ -1,4 +1,4 @@
-﻿using CourseWork.Models.ViewModels;
+﻿using InsuranceAgency.Models.ViewModels;
 using InsuranceAgency.Models;
 using System.Collections.Generic;
 using System.Linq;

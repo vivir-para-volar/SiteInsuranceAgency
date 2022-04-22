@@ -1,3 +1,6 @@
+using InsuranceAgency.Models.Security;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +19,22 @@ namespace InsuranceAgency
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            MyIdentityDbContext db = new MyIdentityDbContext();
+            RoleStore<MyIdentityRole> roleStore = new RoleStore<MyIdentityRole>(db);
+            RoleManager<MyIdentityRole> roleManager = new RoleManager<MyIdentityRole>(roleStore);
+
+            if (!roleManager.RoleExists("Administrator"))
+            {
+                MyIdentityRole newRole = new MyIdentityRole("Administrator", "Администратор обладает полными правами в системе");
+                roleManager.Create(newRole);
+            }
+
+            if (!roleManager.RoleExists("Operator"))
+            {
+                MyIdentityRole newRole = new MyIdentityRole("Operator", "Операторы могут только добавлять и изменять данные в системе");
+                roleManager.Create(newRole);
+            }
         }
     }
 }
