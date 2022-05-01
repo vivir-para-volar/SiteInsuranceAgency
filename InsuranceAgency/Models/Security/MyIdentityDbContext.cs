@@ -4,7 +4,7 @@ namespace InsuranceAgency.Models.Security
 {
     public class MyIdentityDbContext : IdentityDbContext<MyIdentityUser>
     {
-        public MyIdentityDbContext() : base("AgencyDBContext")
+        public MyIdentityDbContext() : base("IdentityDB")
         {
 
         }

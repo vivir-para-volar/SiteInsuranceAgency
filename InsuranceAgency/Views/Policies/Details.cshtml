@@ -1,52 +1,52 @@
-﻿@model InsuranceAgency.Models.Policy
+﻿@model InsuranceAgency.Models.ViewModels.AllInfoAboutPolicy
 
 @{
     ViewBag.Title = "Details";
 }
 
 <h2>Подробнее о полисе</h2>
+<hr />
 
 <div>
-    <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.InsuranceType)
+            @Html.DisplayNameFor(model => model.Policy.InsuranceType)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.InsuranceType)
+            @Html.DisplayFor(model => model.Policy.InsuranceType)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.InsurancePremium)
+            @Html.DisplayNameFor(model => model.Policy.InsurancePremium)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.InsurancePremium)
+            @Html.DisplayFor(model => model.Policy.InsurancePremium)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.InsuranceAmount)
+            @Html.DisplayNameFor(model => model.Policy.InsuranceAmount)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.InsuranceAmount)
+            @Html.DisplayFor(model => model.Policy.InsuranceAmount)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.DateOfConclusion)
+            @Html.DisplayNameFor(model => model.Policy.DateOfConclusion)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.DateOfConclusion)
+            @Html.DisplayFor(model => model.Policy.DateOfConclusion)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.ExpirationDate)
+            @Html.DisplayNameFor(model => model.Policy.ExpirationDate)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.ExpirationDate)
+            @Html.DisplayFor(model => model.Policy.ExpirationDate)
         </dd>
 
         <dt>
@@ -54,7 +54,7 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Policyholder.FullName)
+            @Html.DisplayFor(model => model.Policy.Policyholder.FullName)
         </dd>
 
         <dt>
@@ -62,7 +62,7 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Car.Model)
+            @Html.DisplayFor(model => model.Policy.Car.Model)
         </dd>
 
         <dt>
@@ -70,12 +70,79 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Employee.FullName)
+            @Html.DisplayFor(model => model.Policy.Employee.FullName)
         </dd>
 
     </dl>
 </div>
-<p>
-    @Html.ActionLink("Редактировать", "Edit", new { id = Model.ID }) |
-    @Html.ActionLink("Вернуться к списку", "Index")
-</p>
+
+<div>
+    <br />
+    <h4>Лица, допущенные к управлению</h4>
+
+    <table class="table table-bordered">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.PersonsAllowedToDrive.First().FullName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PersonsAllowedToDrive.First().DrivingLicence)
+            </th>
+        </tr>
+
+        @foreach (var item in Model.PersonsAllowedToDrive)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DrivingLicence)
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+
+<div>
+    <br />
+    <h4>Страховые случаи</h4>
+
+    <table class="table table-bordered">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.InsuranceEvents.First().Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InsuranceEvents.First().InsurancePayment)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InsuranceEvents.First().Description)
+            </th>
+        </tr>
+
+        @foreach (var item in Model.InsuranceEvents)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.InsurancePayment)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+
+<div>
+    <br />
+    <p>
+        @Html.ActionLink("Редактировать", "Edit", new { id = Model.Policy.ID }) |
+        @Html.ActionLink("Вернуться к списку", "Index")
+    </p>
+</div>

@@ -208,6 +208,7 @@
     <Compile Include="Models\Security\MyIdentityRole.cs" />
     <Compile Include="Models\Security\MyIdentityUser.cs" />
     <Compile Include="Models\Security\Register.cs" />
+    <Compile Include="Models\ViewModels\AllInfoAboutPolicy.cs" />
     <Compile Include="Models\ViewModels\PersonsAllowedToDriveCheck.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -277,7 +278,6 @@
     <Content Include="Views\Policyholders\Details.cshtml" />
     <Content Include="Views\Policyholders\Edit.cshtml" />
     <Content Include="Views\Policyholders\Index.cshtml" />
-    <Content Include="Views\Policies\Create.cshtml" />
     <Content Include="Views\Policies\Delete.cshtml" />
     <Content Include="Views\Policies\Details.cshtml" />
     <Content Include="Views\Policies\Edit.cshtml" />

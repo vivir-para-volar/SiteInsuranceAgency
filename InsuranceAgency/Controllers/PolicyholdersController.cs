@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using InsuranceAgency;
 using InsuranceAgency.Models;
 
 namespace InsuranceAgency.Controllers
@@ -51,9 +46,24 @@ namespace InsuranceAgency.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Policyholders.Add(policyholder);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                policyholder.FullName = policyholder.FullName.Trim();
+
+                int countTelephone = db.Policyholders.Where(p => p.Telephone == policyholder.Telephone).Count();
+                int countPassport = db.Policyholders.Where(p => p.Passport == policyholder.Passport).Count();
+
+                if (countTelephone == 0 && countPassport == 0)
+                {
+                    db.Policyholders.Add(policyholder);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    if (countTelephone > 0)
+                        ModelState.AddModelError("Telephone", "Данный телефон уже используется");
+                    if (countPassport > 0)
+                        ModelState.AddModelError("Passport", "Данный пасспорт уже используется");
+                }
             }
 
             return View(policyholder);
@@ -83,9 +93,24 @@ namespace InsuranceAgency.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(policyholder).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                policyholder.FullName = policyholder.FullName.Trim();
+
+                int countTelephone = db.Policyholders.Where(p => p.Telephone == policyholder.Telephone && p.ID != policyholder.ID).Count();
+                int countPassport = db.Policyholders.Where(p => p.Passport == policyholder.Passport && p.ID != policyholder.ID).Count();
+
+                if (countTelephone == 0 && countPassport == 0)
+                {
+                    db.Entry(policyholder).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    if (countTelephone > 0)
+                        ModelState.AddModelError("Telephone", "Данный телефон уже используется");
+                    if (countPassport > 0)
+                        ModelState.AddModelError("Passport", "Данный пасспорт уже используется");
+                }
             }
             return View(policyholder);
         }

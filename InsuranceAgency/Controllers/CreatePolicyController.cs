@@ -118,5 +118,14 @@ namespace InsuranceAgency.Controllers
 
             return RedirectToAction("Index", "Policies");
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
     }
 }

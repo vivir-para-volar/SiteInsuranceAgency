@@ -1,8 +1,10 @@
-﻿using System.Data.Entity;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using InsuranceAgency.Models;
+using InsuranceAgency.Models.ViewModels;
 
 namespace InsuranceAgency.Controllers
 {
@@ -33,33 +35,12 @@ namespace InsuranceAgency.Controllers
             {
                 return HttpNotFound();
             }
-            return View(policy);
-        }
+            List<PersonAllowedToDrive> listPersonsAllowedToDrive = db.PersonAllowedToDrives.Include(p => p.Policies).ToArray().Where(p => p.Policies.Contains(policy)).ToList();
+            List<InsuranceEvent> listInsuranceEvents = db.InsuranceEvents.Where(i => i.PolicyID == id).ToList();
 
-        // GET: Policies/Create
-        public ActionResult Create()
-        {
-            ViewBag.CarID = new SelectList(db.Car, "ID", "Model");
-            ViewBag.EmployeeID = new SelectList(db.Employees, "ID", "FullName");
-            ViewBag.PolicyholderID = new SelectList(db.Policyholders, "ID", "FullName");
-            return View();
-        }
+            var allInfoAboutPolicy = new AllInfoAboutPolicy(policy, listPersonsAllowedToDrive, listInsuranceEvents);
 
-        // POST: Policies/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,InsuranceType,InsurancePremium,InsuranceAmount,DateOfConclusion,ExpirationDate,PolicyholderID,CarID,EmployeeID")] Policy policy)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Policies.Add(policy);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            ViewBag.CarID = new SelectList(db.Car, "ID", "Model");
-            ViewBag.EmployeeID = new SelectList(db.Employees, "ID", "FullName");
-            ViewBag.PolicyholderID = new SelectList(db.Policyholders, "ID", "FullName");
-            return View(policy);
+            return View(allInfoAboutPolicy);
         }
 
         // GET: Policies/Edit/5
