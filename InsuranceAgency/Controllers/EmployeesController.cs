@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using InsuranceAgency;
 using InsuranceAgency.Models;
+using InsuranceAgency.Models.Security;
+using Microsoft.AspNet.Identity;
+using WebCinema.Controllers;
 
 namespace InsuranceAgency.Controllers
 {
@@ -43,17 +41,45 @@ namespace InsuranceAgency.Controllers
         }
 
         // POST: Employees/Create
-        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        // сведения см. в разделе https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ID,FullName,Birthday,Telephone,Passport,Login,Password,Admin,Works")] Employee employee)
         {
             if (ModelState.IsValid)
             {
-                db.Employees.Add(employee);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                employee.FullName = employee.FullName.Trim();
+
+                int countTelephone = db.Employees.Where(e => e.Telephone == employee.Telephone && e.ID != employee.ID).Count();
+                int countPassport = db.Employees.Where(e => e.Passport == employee.Passport && e.ID != employee.ID).Count();
+                int countLogin = db.Employees.Where(e => e.Login == employee.Login && e.ID != employee.ID).Count();
+
+                if (countTelephone == 0 && countPassport == 0 && countLogin == 0)
+                {
+                    db.Employees.Add(employee);
+                    db.SaveChanges();
+
+                    var ac = new AccountController();
+                    Register register = new Register();
+
+                    register.UserName = employee.Login;
+                    register.FullName = employee.FullName;
+                    register.BirthDate = employee.Birthday;
+                    register.PhoneNumber = employee.Telephone;
+                    register.Password = employee.Password;
+
+                    ac.RegisterOperator(register);
+
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    if (countTelephone > 0)
+                        ModelState.AddModelError("Telephone", "Данный телефон уже используется");
+                    if (countPassport > 0)
+                        ModelState.AddModelError("Passport", "Данный пасспорт уже используется");
+                    if (countLogin > 0)
+                        ModelState.AddModelError("Login", "Данный логин уже используется");
+                }
             }
 
             return View(employee);
@@ -75,17 +101,33 @@ namespace InsuranceAgency.Controllers
         }
 
         // POST: Employees/Edit/5
-        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        // сведения см. в разделе https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ID,FullName,Birthday,Telephone,Passport,Login,Password,Admin,Works")] Employee employee)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(employee).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                employee.FullName = employee.FullName.Trim();
+
+                int countTelephone = db.Employees.Where(e => e.Telephone == employee.Telephone && e.ID != employee.ID).Count();
+                int countPassport = db.Employees.Where(e => e.Passport == employee.Passport && e.ID != employee.ID).Count();
+                int countLogin = db.Employees.Where(e => e.Login == employee.Login && e.ID != employee.ID).Count();
+
+                if (countTelephone == 0 && countPassport == 0 && countLogin == 0)
+                {
+                    db.Entry(employee).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    if (countTelephone > 0)
+                        ModelState.AddModelError("Telephone", "Данный телефон уже используется");
+                    if (countPassport > 0)
+                        ModelState.AddModelError("Passport", "Данный пасспорт уже используется");
+                    if (countLogin > 0)
+                        ModelState.AddModelError("Login", "Данный логин уже используется");
+                }
             }
             return View(employee);
         }

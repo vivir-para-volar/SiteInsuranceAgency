@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -25,10 +24,12 @@ namespace InsuranceAgency.Models
         public int InsuranceAmount { get; set; }
 
         [Display(Name = "Дата заключения")]
+        [Required(ErrorMessage = "Введите Дату заключения")]
         [DataType(DataType.Date)]
         public DateTime DateOfConclusion { get; set; }
 
         [Display(Name = "Дата окончания действия")]
+        [Required(ErrorMessage = "Введите Дату окончания действия")]
         [DataType(DataType.Date)]
         public DateTime ExpirationDate { get; set; }
 

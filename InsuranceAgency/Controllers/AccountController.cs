@@ -5,8 +5,6 @@ using InsuranceAgency.Models.Security;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
-using InsuranceAgency.Models.Security;
-
 
 namespace WebCinema.Controllers
 {
@@ -51,16 +49,45 @@ namespace WebCinema.Controllers
                 MyIdentityUser user = new MyIdentityUser();
 
                 user.UserName = model.UserName;
-                user.Email = model.Email;
                 user.FullName = model.FullName;
                 user.BirthDate = model.BirthDate;
-                user.Bio = model.Bio;
+                user.PhoneNumber = model.PhoneNumber;
+                user.Email = model.Email;
 
                 IdentityResult result = userManager.Create(user, model.Password);
 
                 if (result.Succeeded)
                 {
-                    userManager.AddToRole(user.Id, "Administrator");
+                    userManager.AddToRole(user.Id, "User");
+                    return RedirectToAction("Login", "Account");
+                }
+                else
+                {
+                    ModelState.AddModelError("UserName", "Ошибка при создании пользователя!");
+                }
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult RegisterOperator(Register model)
+        {
+            if (ModelState.IsValid)
+            {
+                MyIdentityUser user = new MyIdentityUser();
+
+                user.UserName = model.UserName;
+                user.FullName = model.FullName;
+                user.BirthDate = model.BirthDate;
+                user.PhoneNumber = model.PhoneNumber;
+                user.Email = model.Email;
+
+                IdentityResult result = userManager.Create(user, model.Password);
+
+                if (result.Succeeded)
+                {
+                    userManager.AddToRole(user.Id, "Operator");
                     return RedirectToAction("Login", "Account");
                 }
                 else
@@ -146,7 +173,7 @@ namespace WebCinema.Controllers
             ChangeProfile model = new ChangeProfile();
             model.FullName = user.FullName;
             model.BirthDate = user.BirthDate;
-            model.Bio = user.Bio;
+            model.PhoneNumber = user.PhoneNumber;
             return View(model);
         }
 
@@ -160,7 +187,7 @@ namespace WebCinema.Controllers
                 MyIdentityUser user = userManager.FindByName(HttpContext.User.Identity.Name);
                 user.FullName = model.FullName;
                 user.BirthDate = model.BirthDate;
-                user.Bio = model.Bio;
+                user.PhoneNumber = model.PhoneNumber;
                 IdentityResult result = userManager.Update(user);
                 if (result.Succeeded)
                 {
@@ -183,7 +210,5 @@ namespace WebCinema.Controllers
             authenticationManager.SignOut();
             return RedirectToAction("Login", "Account");
         }
-
-
     }
 }

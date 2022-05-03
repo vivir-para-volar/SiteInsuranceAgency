@@ -33,15 +33,15 @@ namespace InsuranceAgency.Models
 
         [Display(Name = "Логин")]
         [Required(ErrorMessage = "Введите Логин")]
-        [MinLength(4, ErrorMessage = "Логин должен содержать минимум 4 символа")]
-        [MaxLength(50, ErrorMessage = "Логин должен содержать максимум 50 символов")]
+        [MinLength(6, ErrorMessage = "Логин должен содержать минимум 6 символов")]
+        [MaxLength(40, ErrorMessage = "Логин должен содержать максимум 40 символов")]
         public string Login { get; set; }
 
         [Display(Name = "Пароль")]
         [Required(ErrorMessage = "Введите Пароль")]
         [DataType(DataType.Password)]
-        [MinLength(4, ErrorMessage = "Пароль должен содержать минимум 4 символа")]
-        [MaxLength(32, ErrorMessage = "Пароль должен содержать максимум 32 символа")]
+        [MinLength(6, ErrorMessage = "Пароль должен содержать минимум 6 символов")]
+        [MaxLength(40, ErrorMessage = "Пароль должен содержать максимум 40 символа")]
         public string Password { get; set; }
 
         [Display(Name = "Админ")]

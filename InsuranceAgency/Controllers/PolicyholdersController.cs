@@ -38,8 +38,6 @@ namespace InsuranceAgency.Controllers
         }
 
         // POST: Policyholders/Create
-        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        // сведения см. в разделе https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ID,FullName,Birthday,Telephone,Passport")] Policyholder policyholder)
@@ -85,8 +83,6 @@ namespace InsuranceAgency.Controllers
         }
 
         // POST: Policyholders/Edit/5
-        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        // сведения см. в разделе https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ID,FullName,Birthday,Telephone,Passport")] Policyholder policyholder)

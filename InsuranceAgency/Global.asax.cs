@@ -1,10 +1,6 @@
 using InsuranceAgency.Models.Security;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
@@ -33,6 +29,12 @@ namespace InsuranceAgency
             if (!roleManager.RoleExists("Operator"))
             {
                 MyIdentityRole newRole = new MyIdentityRole("Operator", "Операторы могут только добавлять и изменять данные в системе");
+                roleManager.Create(newRole);
+            }
+
+            if (!roleManager.RoleExists("User"))
+            {
+                MyIdentityRole newRole = new MyIdentityRole("User", "Пользователи могут только смотреть свои данные в системе");
                 roleManager.Create(newRole);
             }
         }

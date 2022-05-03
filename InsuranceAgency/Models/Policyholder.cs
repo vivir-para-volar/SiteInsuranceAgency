@@ -15,11 +15,13 @@ namespace InsuranceAgency.Models
         public string FullName { get; set; }
 
         [Display(Name = "Дата рождения")]
+        [Required(ErrorMessage = "Введите Дату рождения")]
         [DataType(DataType.Date)]
         public DateTime Birthday { get; set; }
 
         [Display(Name = "Телефон")]
         [Required(ErrorMessage = "Введите Телефон")]
+        [DataType(DataType.PhoneNumber)]
         [MaxLength(15, ErrorMessage = "Телефон не должен превышать 15 цифр")]
         [RegularExpression(@"^[0-9]*$", ErrorMessage = "Данное поле может включать только цифры")]
         public string Telephone { get; set; }
