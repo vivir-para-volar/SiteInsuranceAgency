@@ -11,6 +11,7 @@ namespace InsuranceAgency.Controllers
         private AgencyDBContext db = new AgencyDBContext();
 
         // GET: CreatePolicy
+        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Index()
         {
             return View(db.Policyholders.ToList());

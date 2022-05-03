@@ -13,6 +13,7 @@ namespace InsuranceAgency.Controllers
         private AgencyDBContext db = new AgencyDBContext();
 
         // GET: Policies
+        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Index()
         {
             var policies = db.Policies.Include(p => p.Car).Include(p => p.Employee).Include(p => p.Policyholder);
@@ -20,6 +21,7 @@ namespace InsuranceAgency.Controllers
         }
 
         // GET: Policies/Details/5
+        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -44,6 +46,7 @@ namespace InsuranceAgency.Controllers
         }
 
         // GET: Policies/Edit/5
+        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -82,6 +85,7 @@ namespace InsuranceAgency.Controllers
         }
 
         // GET: Policies/Delete/5
+        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Delete(int? id)
         {
             if (id == null)

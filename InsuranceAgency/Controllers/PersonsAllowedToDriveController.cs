@@ -11,12 +11,14 @@ namespace InsuranceAgency.Controllers
         private AgencyDBContext db = new AgencyDBContext();
 
         // GET: PersonsAllowedToDrive
+        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Index()
         {
             return View(db.PersonAllowedToDrives.ToList());
         }
 
         // GET: PersonsAllowedToDrive/Details/5
+        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -32,14 +34,13 @@ namespace InsuranceAgency.Controllers
         }
 
         // GET: PersonsAllowedToDrive/Create
+        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Create()
         {
             return View();
         }
 
         // POST: PersonsAllowedToDrive/Create
-        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        // сведения см. в разделе https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ID,FullName,DrivingLicence")] PersonAllowedToDrive personAllowedToDrive)
@@ -55,6 +56,7 @@ namespace InsuranceAgency.Controllers
         }
 
         // GET: PersonsAllowedToDrive/Edit/5
+        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -70,8 +72,6 @@ namespace InsuranceAgency.Controllers
         }
 
         // POST: PersonsAllowedToDrive/Edit/5
-        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        // сведения см. в разделе https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ID,FullName,DrivingLicence")] PersonAllowedToDrive personAllowedToDrive)
@@ -86,6 +86,7 @@ namespace InsuranceAgency.Controllers
         }
 
         // GET: PersonsAllowedToDrive/Delete/5
+        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Delete(int? id)
         {
             if (id == null)

@@ -11,6 +11,7 @@ namespace InsuranceAgency.Controllers
         private AgencyDBContext db = new AgencyDBContext();
 
         // GET: Photos
+        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Index()
         {
             var photos = db.Photos.Include(p => p.Car);
@@ -18,6 +19,7 @@ namespace InsuranceAgency.Controllers
         }
 
         // GET: Photos/Details/5
+        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -33,6 +35,7 @@ namespace InsuranceAgency.Controllers
         }
 
         // GET: Photos/Create
+        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Create()
         {
             ViewBag.CarID = new SelectList(db.Car, "ID", "Model");
@@ -40,8 +43,6 @@ namespace InsuranceAgency.Controllers
         }
 
         // POST: Photos/Create
-        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        // сведения см. в разделе https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ID,Path,CarID")] Photo photo)
@@ -58,6 +59,7 @@ namespace InsuranceAgency.Controllers
         }
 
         // GET: Photos/Edit/5
+        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -74,8 +76,6 @@ namespace InsuranceAgency.Controllers
         }
 
         // POST: Photos/Edit/5
-        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        // сведения см. в разделе https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ID,Path,CarID")] Photo photo)
@@ -91,6 +91,7 @@ namespace InsuranceAgency.Controllers
         }
 
         // GET: Photos/Delete/5
+        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Delete(int? id)
         {
             if (id == null)

@@ -4,7 +4,6 @@ using System.Net;
 using System.Web.Mvc;
 using InsuranceAgency.Models;
 using InsuranceAgency.Models.Security;
-using Microsoft.AspNet.Identity;
 using WebCinema.Controllers;
 
 namespace InsuranceAgency.Controllers
@@ -14,12 +13,14 @@ namespace InsuranceAgency.Controllers
         private AgencyDBContext db = new AgencyDBContext();
 
         // GET: Employees
+        [Authorize (Roles = "Administrator, Operator")]
         public ActionResult Index()
         {
             return View(db.Employees.ToList());
         }
 
         // GET: Employees/Details/5
+        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -35,6 +36,7 @@ namespace InsuranceAgency.Controllers
         }
 
         // GET: Employees/Create
+        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Create()
         {
             return View();
@@ -86,6 +88,7 @@ namespace InsuranceAgency.Controllers
         }
 
         // GET: Employees/Edit/5
+        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -133,6 +136,7 @@ namespace InsuranceAgency.Controllers
         }
 
         // GET: Employees/Delete/5
+        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Delete(int? id)
         {
             if (id == null)

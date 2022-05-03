@@ -11,12 +11,14 @@ namespace InsuranceAgency.Controllers
         private AgencyDBContext db = new AgencyDBContext();
 
         // GET: InsuranceEvents
+        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Index()
         {
             return View(db.InsuranceEvents.ToList());
         }
 
         // GET: InsuranceEvents/Details/5
+        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -32,6 +34,7 @@ namespace InsuranceAgency.Controllers
         }
 
         // GET: InsuranceEvents/Create
+        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Create()
         {
             ViewBag.PolicyID = new SelectList(db.Policies, "ID", "ID");
@@ -39,8 +42,6 @@ namespace InsuranceAgency.Controllers
         }
 
         // POST: InsuranceEvents/Create
-        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        // сведения см. в разделе https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ID,Date,InsurancePayment,Description,PolicyID")] InsuranceEvent insuranceEvent)
@@ -57,6 +58,7 @@ namespace InsuranceAgency.Controllers
         }
 
         // GET: InsuranceEvents/Edit/5
+        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -73,8 +75,6 @@ namespace InsuranceAgency.Controllers
         }
 
         // POST: InsuranceEvents/Edit/5
-        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        // сведения см. в разделе https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ID,Date,InsurancePayment,Description,PolicyID")] InsuranceEvent insuranceEvent)
@@ -90,6 +90,7 @@ namespace InsuranceAgency.Controllers
         }
 
         // GET: InsuranceEvents/Delete/5
+        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Delete(int? id)
         {
             if (id == null)

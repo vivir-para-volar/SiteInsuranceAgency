@@ -11,12 +11,14 @@ namespace InsuranceAgency.Controllers
         private AgencyDBContext db = new AgencyDBContext();
 
         // GET: Policyholders
+        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Index()
         {
             return View(db.Policyholders.ToList());
         }
 
         // GET: Policyholders/Details/5
+        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -32,6 +34,7 @@ namespace InsuranceAgency.Controllers
         }
 
         // GET: Policyholders/Create
+        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Create()
         {
             return View();
@@ -68,6 +71,7 @@ namespace InsuranceAgency.Controllers
         }
 
         // GET: Policyholders/Edit/5
+        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -112,6 +116,7 @@ namespace InsuranceAgency.Controllers
         }
 
         // GET: Policyholders/Delete/5
+        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Delete(int? id)
         {
             if (id == null)

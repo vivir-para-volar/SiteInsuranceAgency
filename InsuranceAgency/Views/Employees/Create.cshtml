@@ -35,9 +35,6 @@
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Telephone, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Telephone, "", new { @class = "text-danger" })
-                <script>
-                    $(".phone_mask").mask("+7(999)999-99-99");
-                </script>
             </div>
         </div>
 
