@@ -204,6 +204,10 @@
     <Compile Include="Migrations\202205030907056_MigrationDB2.designer.cs">
       <DependentUpon>202205030907056_MigrationDB2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202205031149325_MigrateDB6.cs" />
+    <Compile Include="Migrations\202205031149325_MigrateDB6.designer.cs">
+      <DependentUpon>202205031149325_MigrateDB6.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AgencyDBContext.cs" />
     <Compile Include="Models\Car.cs" />
@@ -347,6 +351,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202205030907056_MigrationDB2.resx">
       <DependentUpon>202205030907056_MigrationDB2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202205031149325_MigrateDB6.resx">
+      <DependentUpon>202205031149325_MigrateDB6.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

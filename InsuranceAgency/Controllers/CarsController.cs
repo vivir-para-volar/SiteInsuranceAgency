@@ -86,7 +86,7 @@ namespace InsuranceAgency.Controllers
         }
 
         // GET: Cars/Delete/5
-        [Authorize(Roles = "Administrator, Operator")]
+        [Authorize(Roles = "Administrator")]
         public ActionResult Delete(int? id)
         {
             if (id == null)

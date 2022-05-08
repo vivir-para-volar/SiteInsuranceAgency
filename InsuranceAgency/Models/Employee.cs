@@ -44,14 +44,6 @@ namespace InsuranceAgency.Models
         [MaxLength(40, ErrorMessage = "Пароль должен содержать максимум 40 символа")]
         public string Password { get; set; }
 
-        [Display(Name = "Админ")]
-        [UIHint("Boolean")]
-        public bool Admin { get; set; }
-
-        [Display(Name = "Работает")]
-        [UIHint("Boolean")]
-        public bool Works { get; set; }
-
         public ICollection<Policy> Policies { get; set; }
 
         public Employee()
