@@ -4,7 +4,7 @@
 
 <div class="row">
     <div class="container">
-        @if (Request.IsAuthenticated)
+        @if (Request.IsAuthenticated && !(User.IsInRole("User")))
         {
             <ul class="list-group">
                 <li>@Html.ActionLink("Автомобили", "Index", "Cars")</li>

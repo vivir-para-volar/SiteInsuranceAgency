@@ -6,19 +6,18 @@ using InsuranceAgency.Models;
 
 namespace InsuranceAgency.Controllers
 {
+    [Authorize(Roles = "Administrator, Operator")]
     public class CarsController : Controller
     {
         private AgencyDBContext db = new AgencyDBContext();
 
         // GET: Cars
-        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Index()
         {
             return View(db.Car.ToList());
         }
 
         // GET: Cars/Details/5
-        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -34,7 +33,6 @@ namespace InsuranceAgency.Controllers
         }
 
         // GET: Cars/Create
-        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Create()
         {
             return View();
@@ -47,16 +45,27 @@ namespace InsuranceAgency.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Car.Add(car);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                car.Model = car.Model.Trim();
+
+                int countVIN = db.Car.Where(c => c.VIN == car.VIN).Count();
+
+                if (countVIN == 0)
+                {
+                    db.Car.Add(car);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    if (countVIN > 0)
+                        ModelState.AddModelError("VIN", "Данный VIN номер уже используется");
+                }
             }
 
             return View(car);
         }
 
         // GET: Cars/Edit/5
-        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -78,22 +87,35 @@ namespace InsuranceAgency.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(car).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                car.Model = car.Model.Trim();
+
+                int countVIN = db.Car.Where(c => c.VIN == car.VIN && c.ID != car.ID).Count();
+
+                if (countVIN == 0)
+                {
+                    db.Entry(car).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    if (countVIN > 0)
+                        ModelState.AddModelError("VIN", "Данный VIN номер уже используется");
+                }
             }
             return View(car);
         }
 
         // GET: Cars/Delete/5
-        [Authorize(Roles = "Administrator")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Car car = db.Car.Find(id);
+            Car car = db.Car
+                        .Include(p => p.Policies)
+                        .First(p => p.ID == id);
             if (car == null)
             {
                 return HttpNotFound();

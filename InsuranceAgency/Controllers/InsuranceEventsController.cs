@@ -6,19 +6,18 @@ using InsuranceAgency.Models;
 
 namespace InsuranceAgency.Controllers
 {
+    [Authorize(Roles = "Administrator, Operator")]
     public class InsuranceEventsController : Controller
     {
         private AgencyDBContext db = new AgencyDBContext();
 
         // GET: InsuranceEvents
-        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Index()
         {
             return View(db.InsuranceEvents.ToList());
         }
 
         // GET: InsuranceEvents/Details/5
-        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -34,7 +33,6 @@ namespace InsuranceAgency.Controllers
         }
 
         // GET: InsuranceEvents/Create
-        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Create()
         {
             ViewBag.PolicyID = new SelectList(db.Policies, "ID", "ID");
@@ -58,7 +56,6 @@ namespace InsuranceAgency.Controllers
         }
 
         // GET: InsuranceEvents/Edit/5
-        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -90,7 +87,6 @@ namespace InsuranceAgency.Controllers
         }
 
         // GET: InsuranceEvents/Delete/5
-        [Authorize(Roles = "Administrator")]
         public ActionResult Delete(int? id)
         {
             if (id == null)

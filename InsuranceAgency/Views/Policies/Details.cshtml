@@ -142,7 +142,10 @@
 <div>
     <br />
     <p>
-        @Html.ActionLink("Редактировать", "Edit", new { id = Model.Policy.ID }) |
+        @if (!User.IsInRole("User"))
+        {
+            @Html.ActionLink("Редактировать", "Edit", new { id = Model.Policy.ID })<span> | </span>
+        }
         @Html.ActionLink("Вернуться к списку", "Index")
     </p>
 </div>

@@ -7,6 +7,21 @@
 <h2>Удаление лица, допущенного к управлению</h2>
 
 <h3>Вы уверены, что хотите удалить данное лицо, допущенное к управлению?</h3>
+
+@{
+    if (Model.Policies.Count != 0)
+    {
+        if (User.IsInRole("Administrator"))
+        {
+            <p style="color: darkred">При удалении лица, допущенного к управлению, полисы, закрепленные за ним, также удалятся (за данным лицом, допущенным к управлению, закреплено полисов: @Model.Policies.Count)</p>
+        }
+        if (User.IsInRole("Operator"))
+        {
+            <p style="color: darkred">Вы не можете удалить данное лицо, допущенное к управлению, так как за ним закреплены полисы. Обратитесь к администратору</p>
+        }
+    }
+}
+
 <div>
     <hr />
     <dl class="dl-horizontal">
@@ -28,11 +43,17 @@
 
     </dl>
 
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Удалить" class="btn btn-default" /> |
+            @{
+                if ((Model.Policies.Count != 0 && User.IsInRole("Administrator")) || Model.Policies.Count == 0)
+                {
+                    <input type="submit" value="Удалить" class="btn btn-default" /><span> | </span>
+                }
+            }
             @Html.ActionLink("Вернуться к списку", "Index")
         </div>
     }

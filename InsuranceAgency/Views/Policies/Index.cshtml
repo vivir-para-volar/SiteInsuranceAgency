@@ -6,9 +6,12 @@
 
 <h2>Список полюсов</h2>
 
-<p>
-    @Html.ActionLink("Добавить новый", "Index", "CreatePolicy")
-</p>
+@if (!User.IsInRole("User"))
+{
+    <p>
+        @Html.ActionLink("Добавить новый", "Index", "CreatePolicy")
+    </p>
+}
 
 <table class="table table-bordered">
     <tr>
@@ -66,11 +69,21 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Employee.FullName)
             </td>
-            <td>
-                @Html.ActionLink("Редактировать", "Edit", new { id = item.ID }) |
-                @Html.ActionLink("Подробнее", "Details", new { id = item.ID }) |
-                @Html.ActionLink("Удалить", "Delete", new { id = item.ID })
-            </td>
+
+            @if (User.IsInRole("User"))
+            {
+                <td>
+                    @Html.ActionLink("Подробнее", "Details", new { id = item.ID })
+                </td>
+            }
+            else
+            {
+                <td>
+                    @Html.ActionLink("Редактировать", "Edit", new { id = item.ID }) |
+                    @Html.ActionLink("Подробнее", "Details", new { id = item.ID }) |
+                    @Html.ActionLink("Удалить", "Delete", new { id = item.ID })
+                </td>
+            }
         </tr>
     }
 </table>

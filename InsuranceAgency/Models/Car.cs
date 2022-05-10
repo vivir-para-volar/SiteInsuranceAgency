@@ -13,9 +13,9 @@ namespace InsuranceAgency.Models
         [MaxLength(50, ErrorMessage = "Марка, модель не должна превышать 50 символов")]
         public string Model { get; set; }
 
-        [Display(Name = "Идентификационный номер")]
-        [Required(ErrorMessage = "Введите Идентификационный номер")]
-        [StringLength(17, MinimumLength = 17, ErrorMessage = "Идентификационный номер должен содержать 17 символов")]
+        [Display(Name = "VIN номер")]
+        [Required(ErrorMessage = "Введите VIN номер")]
+        [StringLength(17, MinimumLength = 17, ErrorMessage = "VIN номер должен содержать 17 символов")]
         public string VIN { get; set; }
 
         [Display(Name = "Регистрационный знак")]

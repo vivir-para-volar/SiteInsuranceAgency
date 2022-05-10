@@ -13,6 +13,7 @@
 
 @using (Html.BeginForm("ChoosePersonsAllowedToDrive", "CreatePolicy", FormMethod.Post))
 {
+    @Html.AntiForgeryToken()
     @Html.Hidden("PolicyID", ViewBag.PolicyID as string)
 
     <table class="table">

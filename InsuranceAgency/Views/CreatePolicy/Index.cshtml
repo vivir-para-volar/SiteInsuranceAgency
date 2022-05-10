@@ -46,6 +46,7 @@
             <td>
                 @using (Html.BeginForm())
                 {
+                    @Html.AntiForgeryToken()
                     <div>
                         @Html.Hidden("PolicyholderID", item.ID)
                         <input type="submit" value="Выбрать" class="btn btn-primary" />

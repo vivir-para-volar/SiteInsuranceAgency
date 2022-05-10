@@ -208,6 +208,10 @@
     <Compile Include="Migrations\202205031149325_MigrateDB6.designer.cs">
       <DependentUpon>202205031149325_MigrateDB6.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202205081724429_MigrateDB7.cs" />
+    <Compile Include="Migrations\202205081724429_MigrateDB7.designer.cs">
+      <DependentUpon>202205081724429_MigrateDB7.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AgencyDBContext.cs" />
     <Compile Include="Models\Car.cs" />
@@ -225,6 +229,7 @@
     <Compile Include="Models\Security\MyIdentityUser.cs" />
     <Compile Include="Models\Security\Register.cs" />
     <Compile Include="Models\ViewModels\AllInfoAboutPolicy.cs" />
+    <Compile Include="Models\ViewModels\CreateEmployee.cs" />
     <Compile Include="Models\ViewModels\PersonsAllowedToDriveCheck.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -261,8 +266,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Photos\Create.cshtml" />
     <Content Include="Views\Photos\Delete.cshtml" />
@@ -354,6 +357,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202205031149325_MigrateDB6.resx">
       <DependentUpon>202205031149325_MigrateDB6.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202205081724429_MigrateDB7.resx">
+      <DependentUpon>202205081724429_MigrateDB7.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

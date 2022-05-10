@@ -5,7 +5,7 @@ namespace InsuranceAgency.Models.Security
 {
     public class Register
     {
-        [Required]
+        [Required(ErrorMessage = "Введите Логин")]
         [Display(Name = "Логин")]
         [MinLength(6, ErrorMessage = "Логин должен содержать минимум 6 символов")]
         [MaxLength(40, ErrorMessage = "Логин должен содержать максимум 40 символов")]

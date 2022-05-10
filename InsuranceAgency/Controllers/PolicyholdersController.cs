@@ -6,19 +6,18 @@ using InsuranceAgency.Models;
 
 namespace InsuranceAgency.Controllers
 {
+    [Authorize(Roles = "Administrator, Operator")]
     public class PolicyholdersController : Controller
     {
         private AgencyDBContext db = new AgencyDBContext();
 
         // GET: Policyholders
-        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Index()
         {
             return View(db.Policyholders.ToList());
         }
 
         // GET: Policyholders/Details/5
-        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -34,7 +33,6 @@ namespace InsuranceAgency.Controllers
         }
 
         // GET: Policyholders/Create
-        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Create()
         {
             return View();
@@ -71,7 +69,6 @@ namespace InsuranceAgency.Controllers
         }
 
         // GET: Policyholders/Edit/5
-        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -116,14 +113,15 @@ namespace InsuranceAgency.Controllers
         }
 
         // GET: Policyholders/Delete/5
-        [Authorize(Roles = "Administrator")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Policyholder policyholder = db.Policyholders.Find(id);
+            Policyholder policyholder = db.Policyholders
+                                            .Include(p => p.Policies)
+                                            .First(p => p.ID == id);
             if (policyholder == null)
             {
                 return HttpNotFound();

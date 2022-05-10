@@ -7,6 +7,21 @@
 <h2>Удаление страхователя</h2>
 
 <h3>Вы уверены, что хотите удалить данного страхователя?</h3>
+
+@{
+    if (Model.Policies.Count != 0)
+    {
+        if (User.IsInRole("Administrator"))
+        {
+            <p style="color: darkred">При удалении страхователя полисы, закрепленные за ним, также удалятся (за данным страхователем закреплено полисов: @Model.Policies.Count)</p>
+        }
+        if (User.IsInRole("Operator"))
+        {
+            <p style="color: darkred">Вы не можете удалить данного страхователя, так как за ним закреплены полисы. Обратитесь к администратору</p>
+        }
+    }
+}
+
 <div>
     <hr />
     <dl class="dl-horizontal">
@@ -44,11 +59,18 @@
 
     </dl>
 
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Удалить" class="btn btn-default" /> |
+
+            @{
+                if ((Model.Policies.Count != 0 && User.IsInRole("Administrator")) || Model.Policies.Count == 0)
+                {
+                        <input type="submit" value="Удалить" class="btn btn-default" /><span> | </span>
+                }
+            }
             @Html.ActionLink("Вернуться к списку", "Index")
         </div>
     }

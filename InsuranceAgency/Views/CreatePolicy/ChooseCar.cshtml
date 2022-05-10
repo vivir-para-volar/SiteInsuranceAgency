@@ -53,6 +53,8 @@
             <td>
                 @using (Html.BeginForm("ChooseCar", "CreatePolicy", FormMethod.Post))
                 {
+                    @Html.AntiForgeryToken()
+
                     <div>
                         @Html.Hidden("PolicyholderID", ViewBag.Policyholder.ID as string)
                         @Html.Hidden("CarID", item.ID)

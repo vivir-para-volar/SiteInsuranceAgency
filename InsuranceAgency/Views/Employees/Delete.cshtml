@@ -7,6 +7,14 @@
 <h2>Удаление сотрудника</h2>
 
 <h3>Вы уверены, что хотите удалить данного сотрудника?</h3>
+
+@{
+    if (Model.Policies.Count != 0)
+    {
+    <p style="color: darkred">При удалении сотрудника полисы, закрепленные за ним, также удалятся (за данным сотрудником закреплено полисов: @Model.Policies.Count)</p>
+    }
+}
+
 <div>
     <hr />
     <dl class="dl-horizontal">
@@ -35,6 +43,14 @@
         </dd>
 
         <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
             @Html.DisplayNameFor(model => model.Passport)
         </dt>
 
@@ -42,25 +58,10 @@
             @Html.DisplayFor(model => model.Passport)
         </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Login)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Login)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Password)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Password)
-        </dd>
-
     </dl>
 
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">

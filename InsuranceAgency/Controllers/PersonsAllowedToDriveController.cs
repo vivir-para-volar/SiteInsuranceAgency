@@ -6,19 +6,18 @@ using InsuranceAgency.Models;
 
 namespace InsuranceAgency.Controllers
 {
+    [Authorize(Roles = "Administrator, Operator")]
     public class PersonsAllowedToDriveController : Controller
     {
         private AgencyDBContext db = new AgencyDBContext();
 
         // GET: PersonsAllowedToDrive
-        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Index()
         {
             return View(db.PersonAllowedToDrives.ToList());
         }
 
         // GET: PersonsAllowedToDrive/Details/5
-        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -34,7 +33,6 @@ namespace InsuranceAgency.Controllers
         }
 
         // GET: PersonsAllowedToDrive/Create
-        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Create()
         {
             return View();
@@ -47,16 +45,27 @@ namespace InsuranceAgency.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.PersonAllowedToDrives.Add(personAllowedToDrive);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                personAllowedToDrive.FullName = personAllowedToDrive.FullName.Trim();
+
+                int countDrivingLicence = db.PersonAllowedToDrives.Where(p => p.DrivingLicence == personAllowedToDrive.DrivingLicence).Count();
+
+                if (countDrivingLicence == 0)
+                {
+                    db.PersonAllowedToDrives.Add(personAllowedToDrive);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    if (countDrivingLicence > 0)
+                        ModelState.AddModelError("DrivingLicence", "Данное водительское удостоверение уже используется");
+                }
             }
 
             return View(personAllowedToDrive);
         }
 
         // GET: PersonsAllowedToDrive/Edit/5
-        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -78,22 +87,35 @@ namespace InsuranceAgency.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(personAllowedToDrive).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                personAllowedToDrive.FullName = personAllowedToDrive.FullName.Trim();
+
+                int countDrivingLicence = db.PersonAllowedToDrives.Where(p => p.DrivingLicence == personAllowedToDrive.DrivingLicence && p.ID != personAllowedToDrive.ID).Count();
+
+                if (countDrivingLicence == 0)
+                {
+                    db.Entry(personAllowedToDrive).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    if (countDrivingLicence > 0)
+                        ModelState.AddModelError("Telephone", "Данный телефон уже используется");
+                }
             }
             return View(personAllowedToDrive);
         }
 
         // GET: PersonsAllowedToDrive/Delete/5
-        [Authorize(Roles = "Administrator")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PersonAllowedToDrive personAllowedToDrive = db.PersonAllowedToDrives.Find(id);
+            PersonAllowedToDrive personAllowedToDrive = db.PersonAllowedToDrives
+                                                            .Include(p => p.Policies)
+                                                            .First(p => p.ID == id);
             if (personAllowedToDrive == null)
             {
                 return HttpNotFound();

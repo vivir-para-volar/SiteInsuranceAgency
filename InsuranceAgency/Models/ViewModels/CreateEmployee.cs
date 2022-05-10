@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace InsuranceAgency.Models
+namespace InsuranceAgency.Models.ViewModels
 {
-    public class Employee
+    public class CreateEmployee
     {
-        [Key]
-        public int ID { get; set; }
-
         [Display(Name = "ФИО")]
         [Required(ErrorMessage = "Введите ФИО")]
         [MaxLength(64, ErrorMessage = "ФИО не должено превышать 64 символа")]
@@ -36,11 +32,17 @@ namespace InsuranceAgency.Models
         [RegularExpression(@"^[0-9]*$", ErrorMessage = "Данное поле может включать только цифры")]
         public string Passport { get; set; }
 
-        public ICollection<Policy> Policies { get; set; }
+        [Display(Name = "Логин")]
+        [Required(ErrorMessage = "Введите Логин")]
+        [MinLength(6, ErrorMessage = "Логин должен содержать минимум 6 символов")]
+        [MaxLength(40, ErrorMessage = "Логин должен содержать максимум 40 символов")]
+        public string Login { get; set; }
 
-        public Employee()
-        {
-            Policies = new List<Policy>();
-        }
+        [Display(Name = "Пароль")]
+        [Required(ErrorMessage = "Введите Пароль")]
+        [DataType(DataType.Password)]
+        [MinLength(6, ErrorMessage = "Пароль должен содержать минимум 6 символов")]
+        [MaxLength(40, ErrorMessage = "Пароль должен содержать максимум 40 символа")]
+        public string Password { get; set; }
     }
 }

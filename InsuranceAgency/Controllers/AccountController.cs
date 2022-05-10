@@ -15,9 +15,9 @@ namespace WebCinema.Controllers
 
         public AccountController()
         {
-            MyIdentityDbContext db = new MyIdentityDbContext();
+            var db = new MyIdentityDbContext();
 
-            UserStore<MyIdentityUser> userStore = new UserStore<MyIdentityUser>(db);
+            var userStore = new UserStore<MyIdentityUser>(db);
             userManager = new UserManager<MyIdentityUser>(userStore);
 
             userManager.PasswordValidator = new PasswordValidator
@@ -30,9 +30,8 @@ namespace WebCinema.Controllers
             };
 
 
-            RoleStore<MyIdentityRole> roleStore = new RoleStore<MyIdentityRole>(db);
+            var roleStore = new RoleStore<MyIdentityRole>(db);
             roleManager = new RoleManager<MyIdentityRole>(roleStore);
-
         }
 
         public ActionResult Register()
@@ -42,7 +41,7 @@ namespace WebCinema.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Register(Register model)
+        public ActionResult Register(Register model, string role)
         {
             if (ModelState.IsValid)
             {
@@ -58,36 +57,7 @@ namespace WebCinema.Controllers
 
                 if (result.Succeeded)
                 {
-                    userManager.AddToRole(user.Id, "User");
-                    return RedirectToAction("Login", "Account");
-                }
-                else
-                {
-                    ModelState.AddModelError("UserName", "Ошибка при создании пользователя!");
-                }
-            }
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult RegisterOperator(Register model)
-        {
-            if (ModelState.IsValid)
-            {
-                MyIdentityUser user = new MyIdentityUser();
-
-                user.UserName = model.UserName;
-                user.FullName = model.FullName;
-                user.BirthDate = model.BirthDate;
-                user.PhoneNumber = model.PhoneNumber;
-                user.Email = model.Email;
-
-                IdentityResult result = userManager.Create(user, model.Password);
-
-                if (result.Succeeded)
-                {
-                    userManager.AddToRole(user.Id, "Operator");
+                    userManager.AddToRole(user.Id, role);
                     return RedirectToAction("Login", "Account");
                 }
                 else

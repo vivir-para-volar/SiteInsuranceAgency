@@ -6,12 +6,12 @@ using InsuranceAgency.Models;
 
 namespace InsuranceAgency.Controllers
 {
+    [Authorize(Roles = "Administrator, Operator")]
     public class PhotosController : Controller
     {
         private AgencyDBContext db = new AgencyDBContext();
 
         // GET: Photos
-        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Index()
         {
             var photos = db.Photos.Include(p => p.Car);
@@ -19,7 +19,6 @@ namespace InsuranceAgency.Controllers
         }
 
         // GET: Photos/Details/5
-        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -35,7 +34,6 @@ namespace InsuranceAgency.Controllers
         }
 
         // GET: Photos/Create
-        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Create()
         {
             ViewBag.CarID = new SelectList(db.Car, "ID", "Model");
@@ -59,7 +57,6 @@ namespace InsuranceAgency.Controllers
         }
 
         // GET: Photos/Edit/5
-        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -91,7 +88,6 @@ namespace InsuranceAgency.Controllers
         }
 
         // GET: Photos/Delete/5
-        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Delete(int? id)
         {
             if (id == null)

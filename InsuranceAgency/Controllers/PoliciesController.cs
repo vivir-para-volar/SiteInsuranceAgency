@@ -4,7 +4,10 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using InsuranceAgency.Models;
+using InsuranceAgency.Models.Security;
 using InsuranceAgency.Models.ViewModels;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace InsuranceAgency.Controllers
 {
@@ -13,15 +16,32 @@ namespace InsuranceAgency.Controllers
         private AgencyDBContext db = new AgencyDBContext();
 
         // GET: Policies
-        [Authorize(Roles = "Administrator, Operator")]
+        [Authorize(Roles = "Administrator, Operator, User")]
         public ActionResult Index()
         {
-            var policies = db.Policies.Include(p => p.Car).Include(p => p.Employee).Include(p => p.Policyholder);
-            return View(policies.ToList());
+            List<Policy> policies = new List<Policy>();
+            if (User.IsInRole("User"))
+            {
+                var identitydb = new MyIdentityDbContext();
+                var userManager = new UserManager<MyIdentityUser>(new UserStore<MyIdentityUser>(identitydb));
+                var userTelephone = userManager.GetPhoneNumber(User.Identity.GetUserId());
+
+                try
+                {
+                    int id = db.Policyholders.First(p => p.Telephone == userTelephone).ID;
+                    policies = db.Policies.Include(p => p.Car).Include(p => p.Employee).Include(p => p.Policyholder).Where(p => p.PolicyholderID == id).ToList();
+                }
+                catch { }
+            }
+            else
+            {
+                policies = db.Policies.Include(p => p.Car).Include(p => p.Employee).Include(p => p.Policyholder).ToList();
+            }
+            return View(policies);
         }
 
         // GET: Policies/Details/5
-        [Authorize(Roles = "Administrator, Operator")]
+        [Authorize(Roles = "Administrator, Operator, User")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -68,6 +88,7 @@ namespace InsuranceAgency.Controllers
         // POST: Policies/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Edit([Bind(Include = "ID,InsuranceType,InsurancePremium,InsuranceAmount,DateOfConclusion,ExpirationDate,PolicyholderID,CarID,EmployeeID")] Policy policy)
         {
             if (ModelState.IsValid)
@@ -85,7 +106,7 @@ namespace InsuranceAgency.Controllers
         }
 
         // GET: Policies/Delete/5
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -106,6 +127,7 @@ namespace InsuranceAgency.Controllers
         // POST: Policies/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator, Operator")]
         public ActionResult DeleteConfirmed(int id)
         {
             Policy policy = db.Policies.Find(id);
