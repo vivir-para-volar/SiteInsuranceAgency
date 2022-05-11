@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace InsuranceAgency.Models.Security
 {
-    public class ChangeProfile
+    public class Profile
     {
         [Required]
         [Display(Name = "Логин")]

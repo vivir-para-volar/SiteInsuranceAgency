@@ -223,7 +223,7 @@
     <Compile Include="Models\Policy.cs" />
     <Compile Include="Models\Policyholder.cs" />
     <Compile Include="Models\Security\ChangePassword.cs" />
-    <Compile Include="Models\Security\ChangeProfile.cs" />
+    <Compile Include="Models\Security\Profile.cs" />
     <Compile Include="Models\Security\Login.cs" />
     <Compile Include="Models\Security\MyIdentityRole.cs" />
     <Compile Include="Models\Security\MyIdentityUser.cs" />
@@ -310,6 +310,7 @@
     <Content Include="Views\Account\ChangeProfile.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Account\UserProfile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

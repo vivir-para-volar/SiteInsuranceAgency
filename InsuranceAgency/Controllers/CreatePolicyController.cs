@@ -42,8 +42,8 @@ namespace InsuranceAgency.Controllers
             if (car == null)
                 return HttpNotFound();
 
-            var identitydb = new MyIdentityDbContext();
-            var userManager = new UserManager<MyIdentityUser>(new UserStore<MyIdentityUser>(identitydb));
+            var identityDB = new MyIdentityDbContext();
+            var userManager = new UserManager<MyIdentityUser>(new UserStore<MyIdentityUser>(identityDB));
             var userTelephone = userManager.GetPhoneNumber(User.Identity.GetUserId());
             Employee employee = db.Employees.First(e => e.Telephone == userTelephone);
 

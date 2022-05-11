@@ -1,6 +1,9 @@
-﻿using System.Security.Claims;
+﻿using System.Data.Entity;
+using System.Linq;
+using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
+using InsuranceAgency.Models;
 using InsuranceAgency.Models.Security;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -45,6 +48,13 @@ namespace WebCinema.Controllers
         {
             if (ModelState.IsValid)
             {
+                var userWithSameName = userManager.FindByName(model.UserName);
+                if (userWithSameName != null)
+                {
+                    ModelState.AddModelError("UserName", "Данный логин уже используется");
+                    return View(model);
+                }
+
                 MyIdentityUser user = new MyIdentityUser();
 
                 user.UserName = model.UserName;
@@ -62,7 +72,7 @@ namespace WebCinema.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("UserName", "Ошибка при создании пользователя!");
+                    ModelState.AddModelError("", "Ошибка при создании пользователя!");
                 }
             }
             return View(model);
@@ -80,7 +90,6 @@ namespace WebCinema.Controllers
         {
             if (ModelState.IsValid)
             {
-
                 MyIdentityUser user = userManager.Find(model.UserName, model.Password);
                 if (user != null)
                 {
@@ -108,6 +117,96 @@ namespace WebCinema.Controllers
         }
 
         [Authorize]
+        public ActionResult UserProfile()
+        {
+            MyIdentityUser user = userManager.FindById(User.Identity.GetUserId());
+            Profile model = new Profile();
+            model.UserName = user.UserName;
+            model.FullName = user.FullName;
+            model.BirthDate = user.BirthDate;
+            model.PhoneNumber = user.PhoneNumber;
+            model.Email = user.Email;
+
+            return View(model);
+        }
+
+        [Authorize]
+        public ActionResult ChangeProfile()
+        {
+            MyIdentityUser user = userManager.FindById(User.Identity.GetUserId());
+            Profile model = new Profile();
+            model.UserName = user.UserName;
+            model.FullName = user.FullName;
+            model.BirthDate = user.BirthDate;
+            model.PhoneNumber = user.PhoneNumber;
+            model.Email = user.Email;
+
+            if (User.IsInRole("Operator") || User.IsInRole("Administrator"))
+            {
+                AgencyDBContext db = new AgencyDBContext();
+                var userTelephone = userManager.GetPhoneNumber(User.Identity.GetUserId());
+                ViewBag.EmployeeID = db.Employees.First(e => e.Telephone == userTelephone).ID;
+            }
+            else 
+                ViewBag.EmployeeID = -1;
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangeProfile(Profile model, int employeeID)
+        {
+            if (ModelState.IsValid)
+            {
+                MyIdentityUser user = userManager.FindById(User.Identity.GetUserId());
+                user.UserName = model.UserName.Trim();
+                user.FullName = model.FullName.Trim();
+                user.BirthDate = model.BirthDate;
+                user.PhoneNumber = model.PhoneNumber;
+                user.Email = model.Email;
+
+                IdentityResult result = userManager.Update(user);
+
+                if (User.IsInRole("Operator") || User.IsInRole("Administrator"))
+                {
+                    AgencyDBContext db = new AgencyDBContext();
+
+                    Employee employee = db.Employees.Find(employeeID);
+
+                    int countTelephone = db.Employees.Where(e => e.Telephone == user.PhoneNumber && e.ID != employee.ID).Count();
+
+                    if (countTelephone == 0)
+                    {
+                        employee.FullName = user.FullName;
+                        employee.Birthday = user.BirthDate;
+                        employee.Telephone = user.PhoneNumber;
+                        employee.Email = user.Email;
+
+                        db.Entry(employee).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("PhoneNumber", "Данный телефон уже используется");
+                        return View(model);
+                    }
+                }
+
+                if (result.Succeeded)
+                {
+                    return View("UserProfile", model);
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Ошибка при сохранении профиля");
+                }
+            }
+            return View(model);
+        }
+
+        [Authorize]
         public ActionResult ChangePassword()
         {
             return View();
@@ -120,8 +219,8 @@ namespace WebCinema.Controllers
         {
             if (ModelState.IsValid)
             {
-                MyIdentityUser user = userManager.FindByName(HttpContext.User.Identity.Name);
-                IdentityResult result = userManager.ChangePassword(user.Id, model.OldPassword, model.NewPassword);
+                string userID = User.Identity.GetUserId();
+                IdentityResult result = userManager.ChangePassword(userID, model.OldPassword, model.NewPassword);
                 if (result.Succeeded)
                 {
                     IAuthenticationManager authenticationManager = HttpContext.GetOwinContext().Authentication;
@@ -131,41 +230,6 @@ namespace WebCinema.Controllers
                 else
                 {
                     ModelState.AddModelError("", " Ошибка при смене пароля");
-                }
-            }
-            return View(model);
-        }
-
-        [Authorize]
-        public ActionResult ChangeProfile()
-        {
-            MyIdentityUser user = userManager.FindByName(HttpContext.User.Identity.Name);
-            ChangeProfile model = new ChangeProfile();
-            model.FullName = user.FullName;
-            model.BirthDate = user.BirthDate;
-            model.PhoneNumber = user.PhoneNumber;
-            return View(model);
-        }
-
-        [HttpPost]
-        [Authorize]
-        [ValidateAntiForgeryToken]
-        public ActionResult ChangeProfile(ChangeProfile model)
-        {
-            if (ModelState.IsValid)
-            {
-                MyIdentityUser user = userManager.FindByName(HttpContext.User.Identity.Name);
-                user.FullName = model.FullName;
-                user.BirthDate = model.BirthDate;
-                user.PhoneNumber = model.PhoneNumber;
-                IdentityResult result = userManager.Update(user);
-                if (result.Succeeded)
-                {
-                    ViewBag.Message = "Profile updated successfully.";
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Ошибка при сохранении профиля.");
                 }
             }
             return View(model);

@@ -16,7 +16,7 @@ namespace InsuranceAgency.Controllers
         private AgencyDBContext db = new AgencyDBContext();
 
         // GET: Policies
-        [Authorize(Roles = "Administrator, Operator, User")]
+        [Authorize]
         public ActionResult Index()
         {
             List<Policy> policies = new List<Policy>();
@@ -41,7 +41,7 @@ namespace InsuranceAgency.Controllers
         }
 
         // GET: Policies/Details/5
-        [Authorize(Roles = "Administrator, Operator, User")]
+        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)

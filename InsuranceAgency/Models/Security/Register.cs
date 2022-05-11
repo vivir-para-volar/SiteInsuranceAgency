@@ -27,6 +27,7 @@ namespace InsuranceAgency.Models.Security
         [RegularExpression(@"^[0-9]*$", ErrorMessage = "Данное поле может включать только цифры")]
         public string PhoneNumber { get; set; }
 
+        [Required(ErrorMessage = "Введите Email")]
         [Display(Name = "Email")]
         [EmailAddress]
         public string Email { get; set; }
