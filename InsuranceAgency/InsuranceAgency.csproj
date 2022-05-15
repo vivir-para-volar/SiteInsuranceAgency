@@ -180,6 +180,7 @@
     <Compile Include="Controllers\PhotosController.cs" />
     <Compile Include="Controllers\PoliciesController.cs" />
     <Compile Include="Controllers\PolicyholdersController.cs" />
+    <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -246,6 +247,7 @@
     <Compile Include="Models\ViewModels\AllInfoAboutPolicy.cs" />
     <Compile Include="Models\ViewModels\CreateEmployee.cs" />
     <Compile Include="Models\ViewModels\PersonsAllowedToDriveCheck.cs" />
+    <Compile Include="Models\ViewModels\Report.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -259,6 +261,9 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Content\Reports\UsersReport.xlsx" />
+    <Content Include="Content\Reports\PoliciesReport.xlsx" />
+    <Content Include="Content\Reports\Report.xlsx" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -318,7 +323,6 @@
     <Content Include="Views\Policies\Index.cshtml" />
     <Content Include="Views\CreatePolicy\Index.cshtml" />
     <Content Include="Views\CreatePolicy\ChooseCar.cshtml" />
-    <Content Include="Views\CreatePolicy\ChooseEmployee.cshtml" />
     <Content Include="Views\CreatePolicy\ChooseInfo.cshtml" />
     <Content Include="Views\CreatePolicy\ChoosePersonsAllowedToDrive.cshtml" />
     <Content Include="Views\Account\ChangePassword.cshtml" />
@@ -327,10 +331,10 @@
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Account\UserProfile.cshtml" />
     <Content Include="Views\Cars\AddPhoto.cshtml" />
+    <Content Include="Views\Reports\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Reports\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

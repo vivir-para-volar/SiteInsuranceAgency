@@ -41,6 +41,8 @@
                                     <li>@Html.ActionLink("Сотрудники", "Index", "Employees")</li>
                                 </ul>
                             </li>
+
+                            <li>@Html.ActionLink("Отчёты", "Index", "Reports")</li>
                         </ul>
                     }
                     if (User.IsInRole("Operator"))
@@ -58,6 +60,8 @@
                                     <li>@Html.ActionLink("Страхователи", "Index", "Policyholders")</li>
                                 </ul>
                             </li>
+
+                            <li>@Html.ActionLink("Отчёты", "Index", "Reports")</li>
                         </ul>
                     }
                     if (User.IsInRole("User"))
