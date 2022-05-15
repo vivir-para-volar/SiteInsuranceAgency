@@ -44,7 +44,7 @@ namespace WebCinema.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Register(Register model, string role)
+        public ActionResult Register(Register model)
         {
             if (ModelState.IsValid)
             {
@@ -52,6 +52,12 @@ namespace WebCinema.Controllers
                 if (userWithSameName != null)
                 {
                     ModelState.AddModelError("UserName", "Данный логин уже используется");
+                    return View(model);
+                }
+                var userWithSameEmail = userManager.FindByEmail(model.Email);
+                if (userWithSameEmail != null)
+                {
+                    ModelState.AddModelError("Email", "Данный Email уже используется");
                     return View(model);
                 }
 
@@ -67,12 +73,12 @@ namespace WebCinema.Controllers
 
                 if (result.Succeeded)
                 {
-                    userManager.AddToRole(user.Id, role);
+                    userManager.AddToRole(user.Id, "User");
                     return RedirectToAction("Login", "Account");
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Ошибка при создании пользователя!");
+                    ModelState.AddModelError("", "Ошибка при создании пользователя");
                 }
             }
             return View(model);
@@ -167,8 +173,6 @@ namespace WebCinema.Controllers
                 user.PhoneNumber = model.PhoneNumber;
                 user.Email = model.Email;
 
-                IdentityResult result = userManager.Update(user);
-
                 if (User.IsInRole("Operator") || User.IsInRole("Administrator"))
                 {
                     AgencyDBContext db = new AgencyDBContext();
@@ -176,8 +180,9 @@ namespace WebCinema.Controllers
                     Employee employee = db.Employees.Find(employeeID);
 
                     int countTelephone = db.Employees.Where(e => e.Telephone == user.PhoneNumber && e.ID != employee.ID).Count();
+                    int countEmail = db.Employees.Where(e => e.Email == user.Email && e.ID != employee.ID).Count();
 
-                    if (countTelephone == 0)
+                    if (countTelephone == 0 && countEmail == 0)
                     {
                         employee.FullName = user.FullName;
                         employee.Birthday = user.BirthDate;
@@ -189,10 +194,16 @@ namespace WebCinema.Controllers
                     }
                     else
                     {
-                        ModelState.AddModelError("PhoneNumber", "Данный телефон уже используется");
+                        if (countTelephone > 0)
+                            ModelState.AddModelError("Telephone", "Данный телефон уже используется");
+                        if (countEmail > 0)
+                            ModelState.AddModelError("Email", "Данный Email уже используется");
+
                         return View(model);
                     }
                 }
+
+                IdentityResult result = userManager.Update(user);
 
                 if (result.Succeeded)
                 {

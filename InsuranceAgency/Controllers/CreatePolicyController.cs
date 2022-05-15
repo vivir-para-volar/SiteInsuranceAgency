@@ -50,29 +50,12 @@ namespace InsuranceAgency.Controllers
             ViewBag.Policyholder = db.Policyholders.Find(policyholderID);
             ViewBag.Car = car;
             ViewBag.Employee = employee;
+            ViewBag.EmployeeID = employee.ID;
 
             ViewBag.InsuranceType = new SelectList(new List<string> { "ОСАГО", "КАСКО" });
             ViewBag.Period = new SelectList(new List<string> { "6 месяцев", "12 месяцев" });
             return View("ChooseInfo");
         }
-
-        //// POST: CreatePolicy/ChooseEmployee
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult ChooseEmployee(int policyholderID, int carID, int employeeID)
-        //{
-        //    Employee employee = db.Employees.Find(employeeID);
-        //    if (employee == null)
-        //        return HttpNotFound();
-
-        //    ViewBag.Policyholder = db.Policyholders.Find(policyholderID);
-        //    ViewBag.Car = db.Car.Find(carID);
-        //    ViewBag.Employee = employee;
-
-        //    ViewBag.InsuranceType = new SelectList(new List<string> { "ОСАГО", "КАСКО" });
-        //    ViewBag.Period = new SelectList(new List<string> { "6 месяцев", "12 месяцев" });
-        //    return View("ChooseInfo");
-        //}
 
         // POST: CreatePolicy/ChooseInfo
         [HttpPost]

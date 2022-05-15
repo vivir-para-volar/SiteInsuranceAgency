@@ -1,6 +1,8 @@
-﻿using System.Data.Entity;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Web;
 using System.Web.Mvc;
 using InsuranceAgency.Models;
 
@@ -24,11 +26,20 @@ namespace InsuranceAgency.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Car car = db.Car.Find(id);
+            Car car = db.Car.Include(c => c.Photos)
+                            .First(c => c.ID == id);
             if (car == null)
             {
                 return HttpNotFound();
             }
+
+            List<byte[]> photos = new List<byte[]>();
+            foreach (Photo photo in car.Photos)
+            {
+                photos.Add(System.IO.File.ReadAllBytes(Server.MapPath("~/Files/" + photo.Path)));
+            }
+            ViewBag.Photos = photos;
+
             return View(car);
         }
 
@@ -53,7 +64,8 @@ namespace InsuranceAgency.Controllers
                 {
                     db.Car.Add(car);
                     db.SaveChanges();
-                    return RedirectToAction("Index");
+
+                    return View("Index");
                 }
                 else
                 {
@@ -63,6 +75,42 @@ namespace InsuranceAgency.Controllers
             }
 
             return View(car);
+        }
+
+        // GET: Cars/AddPhoto/5
+        public ActionResult AddPhoto(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Car car = db.Car.Find(id);
+            if (car == null)
+            {
+                return HttpNotFound();
+            }
+            return View(car);
+        }
+
+        // POST: Cars/AddPhoto/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddPhoto(int id, HttpPostedFileBase upload)
+        {
+            if (upload != null)
+            {
+                // получаем имя файла
+                string fileName = System.IO.Path.GetFileName(upload.FileName);
+                // сохраняем файл в папку Files в проекте
+                upload.SaveAs(Server.MapPath("~/Files/" + fileName));
+
+                Photo photo = new Photo();
+                photo.CarID = id;
+                photo.Path = fileName;
+                db.Photos.Add(photo);
+                db.SaveChanges();
+            }
+            return RedirectToAction("Index");
         }
 
         // GET: Cars/Edit/5
@@ -113,9 +161,8 @@ namespace InsuranceAgency.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Car car = db.Car
-                        .Include(p => p.Policies)
-                        .First(p => p.ID == id);
+            Car car = db.Car.Include(c => c.Policies)
+                            .First(c => c.ID == id);
             if (car == null)
             {
                 return HttpNotFound();
@@ -133,6 +180,7 @@ namespace InsuranceAgency.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+
 
         protected override void Dispose(bool disposing)
         {

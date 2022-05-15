@@ -43,6 +43,18 @@
 
     </dl>
 </div>
+
+<div>
+    <br />
+    <h4>Галерея</h4>
+    <hr />
+    @foreach (byte[] photo in ViewBag.Photos)
+    {
+        <img width="200" src="data:image/jpeg;base64,@(Convert.ToBase64String(photo))">
+    }
+    <hr />
+</div>
+
 <p>
     @Html.ActionLink("Редактировать", "Edit", new { id = Model.ID }) |
     @Html.ActionLink("Вернуться к списку", "Index")

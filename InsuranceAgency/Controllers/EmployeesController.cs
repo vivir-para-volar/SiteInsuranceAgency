@@ -5,7 +5,8 @@ using System.Web.Mvc;
 using InsuranceAgency.Models;
 using InsuranceAgency.Models.Security;
 using InsuranceAgency.Models.ViewModels;
-using WebCinema.Controllers;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace InsuranceAgency.Controllers
 {
@@ -51,9 +52,10 @@ namespace InsuranceAgency.Controllers
                 createEmployee.FullName = createEmployee.FullName.Trim();
 
                 int countTelephone = db.Employees.Where(e => e.Telephone == createEmployee.Telephone).Count();
+                int countEmail = db.Employees.Where(e => e.Email == createEmployee.Email).Count();
                 int countPassport = db.Employees.Where(e => e.Passport == createEmployee.Passport).Count();
 
-                if (countTelephone == 0 && countPassport == 0)
+                if (countTelephone == 0 && countPassport == 0 && countEmail == 0)
                 {
                     var employee = new Employee();
 
@@ -63,21 +65,45 @@ namespace InsuranceAgency.Controllers
                     employee.Email = createEmployee.Email;
                     employee.Passport = createEmployee.Passport;
 
-                    db.Employees.Add(employee);
-                    db.SaveChanges();
-
-
-                    var ac = new AccountController();
+                    var identityDB = new MyIdentityDbContext();
+                    var userManager = new UserManager<MyIdentityUser>(new UserStore<MyIdentityUser>(identityDB));
                     var register = new Register();
 
-                    register.UserName = createEmployee.Login;
-                    register.FullName = createEmployee.FullName;
-                    register.BirthDate = createEmployee.Birthday;
-                    register.PhoneNumber = createEmployee.Telephone;
-                    register.Email = createEmployee.Email;
-                    register.Password = createEmployee.Password;
+                    var userWithSameName = userManager.FindByName(createEmployee.Login);
+                    if (userWithSameName != null)
+                    {
+                        ModelState.AddModelError("Login", "Данный логин уже используется");
+                        return View(createEmployee);
+                    }
+                    var userWithSameEmail = userManager.FindByEmail(createEmployee.Email);
+                    if (userWithSameEmail != null)
+                    {
+                        ModelState.AddModelError("Email", "Данный Email уже используется");
+                        return View(createEmployee);
+                    }
 
-                    ac.Register(register, "Operator");
+                    MyIdentityUser user = new MyIdentityUser();
+
+                    user.UserName = createEmployee.Login;
+                    user.FullName = createEmployee.FullName;
+                    user.BirthDate = createEmployee.Birthday;
+                    user.PhoneNumber = createEmployee.Telephone;
+                    user.Email = createEmployee.Email;
+
+                    IdentityResult result = userManager.Create(user, createEmployee.Password);
+
+                    if (result.Succeeded)
+                    {
+                        userManager.AddToRole(user.Id, "Operator");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Ошибка при создании пользователя");
+                        return View(createEmployee);
+                    }
+
+                    db.Employees.Add(employee);
+                    db.SaveChanges();
 
                     return RedirectToAction("Index");
                 }
@@ -87,6 +113,8 @@ namespace InsuranceAgency.Controllers
                         ModelState.AddModelError("Telephone", "Данный телефон уже используется");
                     if (countPassport > 0)
                         ModelState.AddModelError("Passport", "Данный пасспорт уже используется");
+                    if (countEmail > 0)
+                        ModelState.AddModelError("Email", "Данный Email уже используется");
                 }
             }
 
@@ -105,25 +133,53 @@ namespace InsuranceAgency.Controllers
             {
                 return HttpNotFound();
             }
+
+            var identityDB = new MyIdentityDbContext();
+            var userManager = new UserManager<MyIdentityUser>(new UserStore<MyIdentityUser>(identityDB));
+            MyIdentityUser user = userManager.FindByEmail(employee.Email);
+            ViewBag.UserID = user.Id;
+
             return View(employee);
         }
 
         // POST: Employees/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,FullName,Birthday,Telephone,Email,Passport")] Employee employee)
+        public ActionResult Edit([Bind(Include = "ID,FullName,Birthday,Telephone,Email,Passport")] Employee employee, string userID)
         {
             if (ModelState.IsValid)
             {
                 employee.FullName = employee.FullName.Trim();
 
                 int countTelephone = db.Employees.Where(e => e.Telephone == employee.Telephone && e.ID != employee.ID).Count();
+                int countEmail = db.Employees.Where(e => e.Email == employee.Email && e.ID != employee.ID).Count();
                 int countPassport = db.Employees.Where(e => e.Passport == employee.Passport && e.ID != employee.ID).Count();
 
-                if (countTelephone == 0 && countPassport == 0)
+                if (countTelephone == 0 && countPassport == 0 && countEmail == 0)
                 {
+                    var identityDB = new MyIdentityDbContext();
+                    var userManager = new UserManager<MyIdentityUser>(new UserStore<MyIdentityUser>(identityDB));
+                    MyIdentityUser user = userManager.FindById(userID);
+                    user.FullName = employee.FullName;
+                    user.BirthDate = employee.Birthday;
+                    user.PhoneNumber = employee.Telephone;
+                    user.Email = employee.Email;
+
+                    IdentityResult result = userManager.Update(user);
+
+                    if (result.Succeeded)
+                    {
+                        userManager.AddToRole(user.Id, "Operator");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Ошибка при изменении пользователя");
+                        return View(employee);
+                    }
+
                     db.Entry(employee).State = EntityState.Modified;
                     db.SaveChanges();
+
                     return RedirectToAction("Index");
                 }
                 else
@@ -132,6 +188,8 @@ namespace InsuranceAgency.Controllers
                         ModelState.AddModelError("Telephone", "Данный телефон уже используется");
                     if (countPassport > 0)
                         ModelState.AddModelError("Passport", "Данный пасспорт уже используется");
+                    if (countEmail > 0)
+                        ModelState.AddModelError("Email", "Данный Email уже используется");
                 }
             }
             return View(employee);
@@ -160,8 +218,21 @@ namespace InsuranceAgency.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Employee employee = db.Employees.Find(id);
+
+            var identityDB = new MyIdentityDbContext();
+            var userManager = new UserManager<MyIdentityUser>(new UserStore<MyIdentityUser>(identityDB));
+            MyIdentityUser user = userManager.FindByEmail(employee.Email);
+            IdentityResult result = userManager.Delete(user);
+
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError("", "Ошибка при удаление пользователя");
+                return View(employee);
+            }
+
             db.Employees.Remove(employee);
             db.SaveChanges();
+
             return RedirectToAction("Index");
         }
 
