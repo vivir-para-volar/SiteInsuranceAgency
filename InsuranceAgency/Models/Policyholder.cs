@@ -26,6 +26,10 @@ namespace InsuranceAgency.Models
         [RegularExpression(@"^[0-9]*$", ErrorMessage = "Данное поле может включать только цифры")]
         public string Telephone { get; set; }
 
+        [Display(Name = "Email")]
+        [EmailAddress]
+        public string Email { get; set; }
+
         [Display(Name = "Паспорт")]
         [Required(ErrorMessage = "Введите Паспорт")]
         [StringLength(10, MinimumLength = 10, ErrorMessage = "Пасспорт должен содержать 10 цифр")]

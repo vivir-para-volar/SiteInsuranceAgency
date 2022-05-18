@@ -15,11 +15,11 @@ namespace InsuranceAgency.Models
         [StringLength(5, MinimumLength = 5, ErrorMessage = "Вид страхования должен содержать 5 символов")]
         public string InsuranceType { get; set; }
 
-        [Display(Name = "Страховая сумма")]
+        [Display(Name = "Страховая премия")]
         [Required(ErrorMessage = "Введите Страховую сумму")]
         public int InsurancePremium { get; set; }
 
-        [Display(Name = "Страховая премия")]
+        [Display(Name = "Страховая сумма")]
         [Required(ErrorMessage = "Введите Страховую премию")]
         public int InsuranceAmount { get; set; }
 

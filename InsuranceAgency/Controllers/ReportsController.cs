@@ -13,6 +13,7 @@ using InsuranceAgency.Models.ViewModels;
 
 namespace InsuranceAgency.Controllers
 {
+    [Authorize(Roles = "Administrator, Operator")]
     public class ReportsController : Controller
     {
         // GET: Reports

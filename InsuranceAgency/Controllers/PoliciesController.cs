@@ -24,14 +24,17 @@ namespace InsuranceAgency.Controllers
             {
                 var identitydb = new MyIdentityDbContext();
                 var userManager = new UserManager<MyIdentityUser>(new UserStore<MyIdentityUser>(identitydb));
-                var userTelephone = userManager.GetPhoneNumber(User.Identity.GetUserId());
+                var userEmail = userManager.GetEmail(User.Identity.GetUserId());
 
-                try
+                if (userEmail != null)
                 {
-                    int id = db.Policyholders.First(p => p.Telephone == userTelephone).ID;
-                    policies = db.Policies.Include(p => p.Car).Include(p => p.Employee).Include(p => p.Policyholder).Where(p => p.PolicyholderID == id).ToList();
+                    Policyholder policyholder = db.Policyholders.FirstOrDefault(e => e.Email == userEmail);
+                    if (policyholder != null)
+                    {
+                        int id = policyholder.ID;
+                        policies = db.Policies.Include(p => p.Car).Include(p => p.Employee).Include(p => p.Policyholder).Where(p => p.PolicyholderID == id).ToList();
+                    }
                 }
-                catch { }
             }
             else
             {

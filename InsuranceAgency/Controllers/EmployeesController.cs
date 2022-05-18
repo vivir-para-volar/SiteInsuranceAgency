@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -165,13 +166,17 @@ namespace InsuranceAgency.Controllers
                     user.PhoneNumber = employee.Telephone;
                     user.Email = employee.Email;
 
+                    List<MyIdentityUser> users = userManager.Users.ToList();
+                    int userWithSameEmail = users.Where(u => u.Email == user.Email && u.Id != user.Id).Count();
+                    if (userWithSameEmail != 0)
+                    {
+                        ModelState.AddModelError("Email", "Данный Email уже используется");
+                        return View(employee);
+                    }
+
                     IdentityResult result = userManager.Update(user);
 
-                    if (result.Succeeded)
-                    {
-                        userManager.AddToRole(user.Id, "Operator");
-                    }
-                    else
+                    if (!result.Succeeded)
                     {
                         ModelState.AddModelError("", "Ошибка при изменении пользователя");
                         return View(employee);

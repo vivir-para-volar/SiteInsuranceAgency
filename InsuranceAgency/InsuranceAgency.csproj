@@ -228,6 +228,14 @@
     <Compile Include="Migrations\202205081724429_MigrateDB7.designer.cs">
       <DependentUpon>202205081724429_MigrateDB7.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202205171150249_MigrateDB8.cs" />
+    <Compile Include="Migrations\202205171150249_MigrateDB8.designer.cs">
+      <DependentUpon>202205171150249_MigrateDB8.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202205171228322_MigrateDB9.cs" />
+    <Compile Include="Migrations\202205171228322_MigrateDB9.designer.cs">
+      <DependentUpon>202205171228322_MigrateDB9.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AgencyDBContext.cs" />
     <Compile Include="Models\Car.cs" />
@@ -382,6 +390,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202205081724429_MigrateDB7.resx">
       <DependentUpon>202205081724429_MigrateDB7.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202205171150249_MigrateDB8.resx">
+      <DependentUpon>202205171150249_MigrateDB8.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202205171228322_MigrateDB9.resx">
+      <DependentUpon>202205171228322_MigrateDB9.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

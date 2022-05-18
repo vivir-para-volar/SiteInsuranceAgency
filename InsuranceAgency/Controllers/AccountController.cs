@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Security.Claims;
 using System.Web;
@@ -150,11 +151,21 @@ namespace WebCinema.Controllers
             if (User.IsInRole("Operator") || User.IsInRole("Administrator"))
             {
                 AgencyDBContext db = new AgencyDBContext();
-                var userTelephone = userManager.GetPhoneNumber(User.Identity.GetUserId());
-                ViewBag.EmployeeID = db.Employees.First(e => e.Telephone == userTelephone).ID;
+                var userEmail = userManager.GetEmail(User.Identity.GetUserId());
+                ViewBag.UserID = db.Employees.First(e => e.Email == userEmail).ID;
             }
-            else 
-                ViewBag.EmployeeID = -1;
+            else if (User.IsInRole("User"))
+            {
+                AgencyDBContext db = new AgencyDBContext();
+                var userEmail = userManager.GetEmail(User.Identity.GetUserId());
+                if (userEmail != null)
+                {
+                    Policyholder policyholder = db.Policyholders.FirstOrDefault(e => e.Email == userEmail);
+                    if (policyholder != null) ViewBag.UserID = policyholder.ID;
+                    else ViewBag.UserID = -1;
+                }
+                else ViewBag.UserID = -1;
+            }
 
             return View(model);
         }
@@ -162,7 +173,7 @@ namespace WebCinema.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public ActionResult ChangeProfile(Profile model, int employeeID)
+        public ActionResult ChangeProfile(Profile model, int userID)
         {
             if (ModelState.IsValid)
             {
@@ -173,11 +184,25 @@ namespace WebCinema.Controllers
                 user.PhoneNumber = model.PhoneNumber;
                 user.Email = model.Email;
 
+                List<MyIdentityUser> users = userManager.Users.ToList();
+                int userWithSameName = users.Where(u => u.UserName == user.UserName && u.Id != user.Id).Count();
+                int userWithSameEmail = users.Where(u => u.Email == user.Email && u.Id != user.Id).Count();
+
+                if (userWithSameName != 0)
+                {
+                    ModelState.AddModelError("UserName", "Данный логин уже используется");
+                    return View(model);
+                }
+                if (userWithSameEmail != 0)
+                {
+                    ModelState.AddModelError("Email", "Данный Email уже используется");
+                    return View(model);
+                }
+
+                AgencyDBContext db = new AgencyDBContext();
                 if (User.IsInRole("Operator") || User.IsInRole("Administrator"))
                 {
-                    AgencyDBContext db = new AgencyDBContext();
-
-                    Employee employee = db.Employees.Find(employeeID);
+                    Employee employee = db.Employees.Find(userID);
 
                     int countTelephone = db.Employees.Where(e => e.Telephone == user.PhoneNumber && e.ID != employee.ID).Count();
                     int countEmail = db.Employees.Where(e => e.Email == user.Email && e.ID != employee.ID).Count();
@@ -195,11 +220,41 @@ namespace WebCinema.Controllers
                     else
                     {
                         if (countTelephone > 0)
-                            ModelState.AddModelError("Telephone", "Данный телефон уже используется");
+                            ModelState.AddModelError("PhoneNumber", "Данный телефон уже используется");
                         if (countEmail > 0)
                             ModelState.AddModelError("Email", "Данный Email уже используется");
 
                         return View(model);
+                    }
+                }
+                else if (User.IsInRole("User"))
+                {
+                    if (userID != -1)
+                    {
+                        Policyholder policyholder = db.Policyholders.Find(userID);
+
+                        int countTelephone = db.Policyholders.Where(p => p.Telephone == user.PhoneNumber && p.ID != policyholder.ID).Count();
+                        int countEmail = db.Policyholders.Where(p => p.Email == user.Email && p.ID != policyholder.ID).Count();
+
+                        if (countTelephone == 0 && countEmail == 0)
+                        {
+                            policyholder.FullName = user.FullName;
+                            policyholder.Birthday = user.BirthDate;
+                            policyholder.Telephone = user.PhoneNumber;
+                            policyholder.Email = user.Email;
+
+                            db.Entry(policyholder).State = EntityState.Modified;
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            if (countTelephone > 0)
+                                ModelState.AddModelError("PhoneNumber", "Данный телефон уже используется");
+                            if (countEmail > 0)
+                                ModelState.AddModelError("Email", "Данный Email уже используется");
+
+                            return View(model);
+                        }
                     }
                 }
 
