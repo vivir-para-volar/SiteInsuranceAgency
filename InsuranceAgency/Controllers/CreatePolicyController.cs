@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using InsuranceAgency.Models.Security;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity;
+using System;
 
 namespace InsuranceAgency.Controllers
 {
@@ -24,6 +25,16 @@ namespace InsuranceAgency.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Index(int policyholderID)
+        {
+            Policyholder policyholder = db.Policyholders.Find(policyholderID);
+            if (policyholder == null)
+                return HttpNotFound();
+
+            ViewBag.Policyholder = policyholder;
+            return View("ChooseCar", db.Car.ToList());
+        }
+
+        public ActionResult ChooseCar(int policyholderID)
         {
             Policyholder policyholder = db.Policyholders.Find(policyholderID);
             if (policyholder == null)
@@ -73,11 +84,44 @@ namespace InsuranceAgency.Controllers
                         policy.ExpirationDate = policy.DateOfConclusion.AddMonths(12);
                         break;
                 }
-                Policy newPolicy = db.Policies.Add(policy);
-                db.SaveChanges();
 
-                ViewBag.PolicyID = newPolicy.ID;
-                return View("ChoosePersonsAllowedToDrive", db.PersonAllowedToDrives.ToList());
+                bool flag = true;
+
+                if (policy.InsurancePremium <= 0)
+                {
+                    ModelState.AddModelError("InsurancePremium", "Страховая премия не может быть меньше или равна 0");
+                    flag = false;
+                }
+                if (policy.InsuranceAmount <= 0)
+                {
+                    ModelState.AddModelError("InsuranceAmount", "Страховая сумма не может быть меньше или равна 0");
+                    flag = false;
+                }
+                if (policy.InsurancePremium >= policy.InsuranceAmount)
+                {
+                    ModelState.AddModelError("InsurancePremium", "Страховая премия не может быть больше или равна Страховой сумме");
+                    flag = false;
+                }
+
+                try
+                {
+                    DateTime date = db.Policies.Where(p => p.InsuranceType == policy.InsuranceType && p.CarID == policy.CarID).Max(p => p.ExpirationDate);
+                    if (policy.DateOfConclusion <= date)
+                    {
+                        ModelState.AddModelError("", "Нельзя оформить полис на данный автомобиль на заданный период, так как уже действует другой");
+                        flag = false;
+                    }
+                }
+                catch { }
+
+                if (flag)
+                {
+                    Policy newPolicy = db.Policies.Add(policy);
+                    db.SaveChanges();
+
+                    ViewBag.PolicyID = newPolicy.ID;
+                    return View("ChoosePersonsAllowedToDrive", db.PersonAllowedToDrives.ToList());
+                }
             }
 
             ViewBag.Policyholder = db.Policyholders.Find(policy.PolicyholderID);
@@ -87,6 +131,13 @@ namespace InsuranceAgency.Controllers
             ViewBag.InsuranceType = new SelectList(new List<string> { "ОСАГО", "КАСКО" });
             ViewBag.Period = new SelectList(new List<string> { "6 месяцев", "12 месяцев" });
             return View(policy);
+        }
+
+        public ActionResult ChoosePersonsAllowedToDrive(int policyID)
+        {
+            ViewBag.PolicyID = policyID;
+
+            return View("ChoosePersonsAllowedToDrive", db.PersonAllowedToDrives.ToList());
         }
 
         // POST: CreatePolicy/ChoosePersonsAllowedToDrive

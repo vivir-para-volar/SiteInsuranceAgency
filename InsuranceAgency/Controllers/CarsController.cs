@@ -44,15 +44,20 @@ namespace InsuranceAgency.Controllers
         }
 
         // GET: Cars/Create
-        public ActionResult Create()
+        public ActionResult Create(int policyholderID = 0)
         {
+            if (HttpContext.Request.UrlReferrer.LocalPath.ToLower().Contains(@"/createpolicy"))
+                ViewBag.FromCreatePolicy = true;
+            else ViewBag.FromCreatePolicy = false;
+
+            ViewBag.PolicyholderID = policyholderID;
             return View();
         }
 
         // POST: Cars/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Model,VIN,RegistrationPlate,VehiclePassport")] Car car)
+        public ActionResult Create([Bind(Include = "ID,Model,VIN,RegistrationPlate,VehiclePassport")] Car car, bool fromCreatePolicy, int policyholderID)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +70,10 @@ namespace InsuranceAgency.Controllers
                     db.Car.Add(car);
                     db.SaveChanges();
 
-                    return View("Index");
+                    if (fromCreatePolicy)
+                        return RedirectToAction("ChooseCar", "CreatePolicy", new { policyholderID = policyholderID });
+                    else
+                        return RedirectToAction("Index");
                 }
                 else
                 {

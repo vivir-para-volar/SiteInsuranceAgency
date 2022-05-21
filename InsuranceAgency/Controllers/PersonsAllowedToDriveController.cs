@@ -33,15 +33,20 @@ namespace InsuranceAgency.Controllers
         }
 
         // GET: PersonsAllowedToDrive/Create
-        public ActionResult Create()
+        public ActionResult Create(int policyID = 0)
         {
+            if (HttpContext.Request.UrlReferrer.LocalPath.ToLower().Contains(@"/createpolicy"))
+                ViewBag.FromCreatePolicy = true;
+            else ViewBag.FromCreatePolicy = false;
+
+            ViewBag.PolicyID = policyID;
             return View();
         }
 
         // POST: PersonsAllowedToDrive/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,FullName,DrivingLicence")] PersonAllowedToDrive personAllowedToDrive)
+        public ActionResult Create([Bind(Include = "ID,FullName,DrivingLicence")] PersonAllowedToDrive personAllowedToDrive, bool fromCreatePolicy, int policyID)
         {
             if (ModelState.IsValid)
             {
@@ -53,7 +58,11 @@ namespace InsuranceAgency.Controllers
                 {
                     db.PersonAllowedToDrives.Add(personAllowedToDrive);
                     db.SaveChanges();
-                    return RedirectToAction("Index");
+
+                    if (fromCreatePolicy)
+                        return RedirectToAction("ChoosePersonsAllowedToDrive", "CreatePolicy", new { policyID = policyID });
+                    else
+                        return RedirectToAction("Index");
                 }
                 else
                 {

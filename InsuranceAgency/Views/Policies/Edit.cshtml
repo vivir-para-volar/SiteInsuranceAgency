@@ -89,8 +89,8 @@
 }
 
 <div>
-    @Html.ActionLink("Стразовые случаи", "Edit", new { id = Model.ID }) |
-    @Html.ActionLink("Лица, допущенные к управлению", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Добавить страховой случай", "CreateInsuranceEvent", new { id = Model.ID }) |
+    @Html.ActionLink("Лица, допущенные к управлению", "EditPersonsAllowedToDrive", new { id = Model.ID }) |
     @Html.ActionLink("Вернуться к списку", "Index")
 </div>
 

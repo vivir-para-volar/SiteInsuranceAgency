@@ -80,8 +80,12 @@
             {
                 <td>
                     @Html.ActionLink("Редактировать", "Edit", new { id = item.ID }) |
-                    @Html.ActionLink("Подробнее", "Details", new { id = item.ID }) |
-                    @Html.ActionLink("Удалить", "Delete", new { id = item.ID })
+                    @Html.ActionLink("Подробнее", "Details", new { id = item.ID })
+                    @if (User.IsInRole("Administrator"))
+                    {
+                        <span> | </span>
+                        @Html.ActionLink("Удалить", "Delete", new { id = item.ID })
+                    }
                 </td>
             }
         </tr>

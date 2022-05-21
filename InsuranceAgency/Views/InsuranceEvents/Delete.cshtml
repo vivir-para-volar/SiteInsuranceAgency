@@ -1,4 +1,4 @@
-﻿@model InsuranceAgency.Models.InsuranceEvent
+﻿@model InsuranceAgency.Models.ViewModels.AllInfoAboutInsuranceEvent
 
 @{
     ViewBag.Title = "Delete";
@@ -11,40 +11,106 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Date)
+            @Html.DisplayNameFor(model => model.InsuranceEvent.Date)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Date)
+            @Html.DisplayFor(model => model.InsuranceEvent.Date)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.InsurancePayment)
+            @Html.DisplayNameFor(model => model.InsuranceEvent.InsurancePayment)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.InsurancePayment)
+            @Html.DisplayFor(model => model.InsuranceEvent.InsurancePayment)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Description)
+            @Html.DisplayNameFor(model => model.InsuranceEvent.Description)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Description)
+            @Html.DisplayFor(model => model.InsuranceEvent.Description)
         </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.PolicyID)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.PolicyID)
-        </dd>
-
     </dl>
+</div>
 
-    @using (Html.BeginForm()) {
+
+<div>
+    <br />
+    <h4>Информация о полисе</h4>
+
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Policy.InsuranceType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Policy.InsuranceType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Policy.InsurancePremium)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Policy.InsurancePremium)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Policy.InsuranceAmount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Policy.InsuranceAmount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Policy.DateOfConclusion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Policy.DateOfConclusion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Policy.ExpirationDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Policy.ExpirationDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Страхователь")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Policy.Policyholder.FullName)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Автомобиль")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Policy.Car.Model)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Сотрудник")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Policy.Employee.FullName)
+        </dd>
+    </dl>
+</div>
+
+<div>
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">

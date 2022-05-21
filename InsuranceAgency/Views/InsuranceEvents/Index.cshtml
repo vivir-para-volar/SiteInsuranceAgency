@@ -6,9 +6,6 @@
 
 <h2>Список страховых случаев</h2>
 
-<p>
-    @Html.ActionLink("Добавить новый", "Create")
-</p>
 <table class="table">
     <tr>
         <th>
@@ -21,31 +18,47 @@
             @Html.DisplayNameFor(model => model.Description)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.PolicyID)
+            @Html.DisplayNameFor(model => model.Policy.InsuranceType)
+        </th>
+        <th>
+            @Html.DisplayName("Страхователь")
+        </th>
+        <th>
+            @Html.DisplayName("Автомобиль")
         </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Date)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.InsurancePayment)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PolicyID)
-        </td>
-        <td>
-            @Html.ActionLink("Редактировать", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Подробнее", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Удалить", "Delete", new { id=item.ID })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InsurancePayment)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Policy.InsuranceType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Policy.Policyholder.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Policy.Car.Model)
+            </td>
+            <td>
+                @Html.ActionLink("Подробнее", "Details", new { id = item.ID })
+                @if (User.IsInRole("Administrator"))
+                {
+                    <span> | </span>
+                    @Html.ActionLink("Удалить", "Delete", new { id = item.ID })
+                }
+            </td>
+        </tr>
+    }
 
 </table>

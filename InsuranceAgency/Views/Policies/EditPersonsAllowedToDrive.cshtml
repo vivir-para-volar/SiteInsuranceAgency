@@ -1,17 +1,13 @@
 ﻿@model IEnumerable<InsuranceAgency.Models.PersonAllowedToDrive>
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "EditPersonsAllowedToDrive";
 }
 
-<h2>Добавление полюса</h2>
+<h2>Изменение полюса</h2>
 
 <h3>Выберите лиц, допущенных к управлению</h3>
 
-<div class="form-group">
-    @Html.ActionLink("Добавить новое", "Create", "PersonsAllowedToDrive", new { policyID = ViewBag.PolicyID }, new { @class = "btn btn-info" })
-</div>
-
-@using (Html.BeginForm("ChoosePersonsAllowedToDrive", "CreatePolicy", FormMethod.Post))
+@using (Html.BeginForm("EditPersonsAllowedToDrive", "Policies", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
     @Html.Hidden("PolicyID", ViewBag.PolicyID as string)
@@ -43,7 +39,19 @@
                 <td>
                     <div>
                         @Html.Hidden($"personsAllowedToDriveChecked[{i}].PersonAllowedToDriveID", item.ID)
-                        @Html.CheckBox($"personsAllowedToDriveChecked[{i}].Check", false, new { @class = "form-check-input" })
+
+                        @{
+                            bool exist = false;
+                            foreach (var person in ViewBag.PersonsAllowedToDrive as List<InsuranceAgency.Models.PersonAllowedToDrive>)
+                            {
+                                if (item.ID == person.ID)
+                                {
+                                    exist = true;
+                                    break;
+                                }
+                            }
+                        }
+                        @Html.CheckBox($"personsAllowedToDriveChecked[{i}].Check", @exist, new { @class = "form-check-input" })
                     </div>
                 </td>
             </tr>
@@ -55,7 +63,11 @@
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Добавить" class="btn btn-default" />
+            <input type="submit" value="Сохранить" class="btn btn-default" />
         </div>
     </div>
 }
+
+<div>
+    @Html.ActionLink("Вернуться", "Edit", new { id = ViewBag.PolicyID })
+</div>

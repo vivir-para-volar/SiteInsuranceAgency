@@ -252,6 +252,7 @@
     <Compile Include="Models\Security\MyIdentityRole.cs" />
     <Compile Include="Models\Security\MyIdentityUser.cs" />
     <Compile Include="Models\Security\Register.cs" />
+    <Compile Include="Models\ViewModels\AllInfoAboutInsuranceEvent.cs" />
     <Compile Include="Models\ViewModels\AllInfoAboutPolicy.cs" />
     <Compile Include="Models\ViewModels\CreateEmployee.cs" />
     <Compile Include="Models\ViewModels\PersonsAllowedToDriveCheck.cs" />
@@ -310,10 +311,8 @@
     <Content Include="Views\Employees\Details.cshtml" />
     <Content Include="Views\Employees\Edit.cshtml" />
     <Content Include="Views\Employees\Index.cshtml" />
-    <Content Include="Views\InsuranceEvents\Create.cshtml" />
     <Content Include="Views\InsuranceEvents\Delete.cshtml" />
     <Content Include="Views\InsuranceEvents\Details.cshtml" />
-    <Content Include="Views\InsuranceEvents\Edit.cshtml" />
     <Content Include="Views\InsuranceEvents\Index.cshtml" />
     <Content Include="Views\PersonsAllowedToDrive\Create.cshtml" />
     <Content Include="Views\PersonsAllowedToDrive\Delete.cshtml" />
@@ -340,6 +339,8 @@
     <Content Include="Views\Account\UserProfile.cshtml" />
     <Content Include="Views\Cars\AddPhoto.cshtml" />
     <Content Include="Views\Reports\Index.cshtml" />
+    <Content Include="Views\Policies\EditPersonsAllowedToDrive.cshtml" />
+    <Content Include="Views\Policies\CreateInsuranceEvent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

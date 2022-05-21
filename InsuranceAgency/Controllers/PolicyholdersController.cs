@@ -39,13 +39,16 @@ namespace InsuranceAgency.Controllers
         // GET: Policyholders/Create
         public ActionResult Create()
         {
+            if (HttpContext.Request.UrlReferrer.LocalPath.ToLower().Contains(@"/createpolicy"))
+                ViewBag.FromCreatePolicy = true;
+            else ViewBag.FromCreatePolicy = false;
             return View();
         }
 
         // POST: Policyholders/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,FullName,Birthday,Telephone,Email,Passport")] Policyholder policyholder)
+        public ActionResult Create([Bind(Include = "ID,FullName,Birthday,Telephone,Email,Passport")] Policyholder policyholder, bool fromCreatePolicy)
         {
             if (ModelState.IsValid)
             {
@@ -61,10 +64,14 @@ namespace InsuranceAgency.Controllers
                 else flag = false;
 
                 if (countTelephone == 0 && countPassport == 0 && (!flag || (flag && countEmail == 0)))
-                {                  
+                {
                     db.Policyholders.Add(policyholder);
                     db.SaveChanges();
-                    return RedirectToAction("Index");
+
+                    if (fromCreatePolicy)
+                        return RedirectToAction("Index", "CreatePolicy");
+                    else
+                        return RedirectToAction("Index");
                 }
                 else
                 {
@@ -95,10 +102,10 @@ namespace InsuranceAgency.Controllers
 
             var identityDB = new MyIdentityDbContext();
             var userManager = new UserManager<MyIdentityUser>(new UserStore<MyIdentityUser>(identityDB));
-            if(policyholder.Email != null)
-            { 
+            if (policyholder.Email != null)
+            {
                 MyIdentityUser user = userManager.FindByEmail(policyholder.Email);
-                if(user != null) ViewBag.UserID = user.Id;
+                if (user != null) ViewBag.UserID = user.Id;
                 else ViewBag.UserID = "-1";
             }
             else ViewBag.UserID = "-1";
@@ -126,7 +133,7 @@ namespace InsuranceAgency.Controllers
 
                 if (countTelephone == 0 && countPassport == 0 && (!flag || (flag && countEmail == 0)))
                 {
-                    if(userID != "-1")
+                    if (userID != "-1")
                     {
                         var identityDB = new MyIdentityDbContext();
                         var userManager = new UserManager<MyIdentityUser>(new UserStore<MyIdentityUser>(identityDB));
@@ -163,7 +170,7 @@ namespace InsuranceAgency.Controllers
                             var identityDB = new MyIdentityDbContext();
                             var userManager = new UserManager<MyIdentityUser>(new UserStore<MyIdentityUser>(identityDB));
                             var roleManager = new RoleManager<MyIdentityRole>(new RoleStore<MyIdentityRole>(identityDB));
-                            
+
                             List<MyIdentityUser> users = userManager.Users.ToList();
                             int userWithSameEmail = users.Where(u => u.Email == policyholder.Email && roleManager.FindById(u.Roles.ToArray()[0].RoleId).Name != "User").Count();
                             if (userWithSameEmail != 0)

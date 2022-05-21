@@ -7,10 +7,10 @@
 <h2>Добавление автомобиля</h2>
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -45,6 +45,9 @@
                 @Html.ValidationMessageFor(model => model.VehiclePassport, "", new { @class = "text-danger" })
             </div>
         </div>
+
+        @Html.Hidden("FromCreatePolicy", ViewBag.FromCreatePolicy as string)
+        @Html.Hidden("PolicyholderID", ViewBag.PolicyholderID as string)
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
