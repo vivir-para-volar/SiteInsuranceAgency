@@ -30,7 +30,7 @@ namespace InsuranceAgency.Controllers
             // Путь к файлу с шаблоном
             string file_path_template = Server.MapPath("~/Content/Reports/UsersReport.xlsx");
             FileInfo fi = new FileInfo(file_path_template);
-            
+
             //Путь к файлу с результатом
             string file_path = Server.MapPath("~/Content/Reports/UsersReportResult.xlsx");
             FileInfo fi_report = new FileInfo(file_path);
@@ -164,8 +164,20 @@ namespace InsuranceAgency.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public FileResult GetReport([Bind(Include = "InsuranceType,StartDate,EndDate")] Report report)
+        public ActionResult GetReport([Bind(Include = "InsuranceType,StartDate,EndDate")] Report report)
         {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.InsuranceType = new SelectList(new List<string> { "ОСАГО и КАСКО", "ОСАГО", "КАСКО" });
+                return View("Index", report);
+            }
+            if(report.StartDate >= report.EndDate)
+            {
+                ModelState.AddModelError("StartDate", "Дата начала не может быть больше Даты окончания");
+                ViewBag.InsuranceType = new SelectList(new List<string> { "ОСАГО и КАСКО", "ОСАГО", "КАСКО" });
+                return View("Index", report);
+            }
+
             // Путь к файлу с шаблоном
             string file_path_template = Server.MapPath("~/Content/Reports/Report.xlsx");
             FileInfo fi = new FileInfo(file_path_template);
