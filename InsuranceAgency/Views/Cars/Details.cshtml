@@ -47,12 +47,34 @@
 <div>
     <br />
     <h4>Галерея</h4>
-    <hr />
-    @foreach (byte[] photo in ViewBag.Photos)
-    {
-        <img width="200" src="data:image/jpeg;base64,@(Convert.ToBase64String(photo))">
-    }
-    <hr />
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayName("Дата загрузки")
+            </th>
+            <th>
+                @Html.DisplayName("Фото")
+            </th>
+            <th></th>
+        </tr>
+
+        @{int i = 0; }
+        @foreach (byte[] photo in ViewBag.Photos)
+        {
+            string uploadDate = (ViewBag.PhotosInfo as List<InsuranceAgency.Models.Photo>)[i].UploadDate.ToString("dd-MM-yyyy");
+            <tr>
+                <td>
+                    @uploadDate
+                </td>
+                <td>
+                    <img width="200" src="data:image/jpeg;base64,@(Convert.ToBase64String(photo))">
+                </td>
+            </tr>
+
+            i++; 
+        }
+
+    </table>
 </div>
 
 <p>

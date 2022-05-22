@@ -1,0 +1,90 @@
+﻿@model InsuranceAgency.Models.Car
+@{
+    ViewBag.Title = "AddPhoto";
+}
+<h2>Добавление фотографии автомобиля</h2>
+
+@using (Html.BeginForm("AddPhoto", "CreateCar", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.Hidden("CarID", Model.ID)
+
+    <div class="form-horizontal">
+        <hr />
+
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayName("Автомобиль")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Model)
+            </dd>
+        </dl>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="file" name="upload" /><br>
+            </div>
+        </div>
+
+        @Html.Hidden("FromCreatePolicy", ViewBag.FromCreatePolicy as string)
+        @Html.Hidden("PolicyholderID", ViewBag.PolicyholderID as string)
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Загрузить" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    <br />
+    <h4>Добавленные фотографии</h4>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayName("Дата загрузки")
+            </th>
+            <th>
+                @Html.DisplayName("Фото")
+            </th>
+            <th></th>
+        </tr>
+
+        @{int i = 0; }
+        @foreach (byte[] photo in ViewBag.Photos)
+        {
+            string uploadDate = (ViewBag.PhotosInfo as List<InsuranceAgency.Models.Photo>)[i].UploadDate.ToString("dd-MM-yyyy");
+            <tr>
+                <td>
+                    @uploadDate
+                </td>
+                <td>
+                    <img width="200" src="data:image/jpeg;base64,@(Convert.ToBase64String(photo))">
+                </td>
+            </tr>
+
+            i++;
+        }
+
+    </table>
+</div>
+
+@using (Html.BeginForm("EndCreate", "CreateCar", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.Hidden("CarID", Model.ID)
+
+    @Html.Hidden("FromCreatePolicy", ViewBag.FromCreatePolicy as string)
+    @Html.Hidden("PolicyholderID", ViewBag.PolicyholderID as string)
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Далее" class="btn btn-primary" />
+        </div>
+    </div>
+}

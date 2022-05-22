@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -36,89 +38,12 @@ namespace InsuranceAgency.Controllers
             List<byte[]> photos = new List<byte[]>();
             foreach (Photo photo in car.Photos)
             {
-                photos.Add(System.IO.File.ReadAllBytes(Server.MapPath("~/Files/" + photo.Path)));
+                photos.Add(System.IO.File.ReadAllBytes(Server.MapPath("~/Files/" + id + "/" + photo.Path)));
             }
             ViewBag.Photos = photos;
+            ViewBag.PhotosInfo = car.Photos;
 
             return View(car);
-        }
-
-        // GET: Cars/Create
-        public ActionResult Create(int policyholderID = 0)
-        {
-            if (HttpContext.Request.UrlReferrer.LocalPath.ToLower().Contains(@"/createpolicy"))
-                ViewBag.FromCreatePolicy = true;
-            else ViewBag.FromCreatePolicy = false;
-
-            ViewBag.PolicyholderID = policyholderID;
-            return View();
-        }
-
-        // POST: Cars/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Model,VIN,RegistrationPlate,VehiclePassport")] Car car, bool fromCreatePolicy, int policyholderID)
-        {
-            if (ModelState.IsValid)
-            {
-                car.Model = car.Model.Trim();
-
-                int countVIN = db.Car.Where(c => c.VIN == car.VIN).Count();
-
-                if (countVIN == 0)
-                {
-                    db.Car.Add(car);
-                    db.SaveChanges();
-
-                    if (fromCreatePolicy)
-                        return RedirectToAction("ChooseCar", "CreatePolicy", new { policyholderID = policyholderID });
-                    else
-                        return RedirectToAction("Index");
-                }
-                else
-                {
-                    if (countVIN > 0)
-                        ModelState.AddModelError("VIN", "Данный VIN номер уже используется");
-                }
-            }
-
-            return View(car);
-        }
-
-        // GET: Cars/AddPhoto/5
-        public ActionResult AddPhoto(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Car car = db.Car.Find(id);
-            if (car == null)
-            {
-                return HttpNotFound();
-            }
-            return View(car);
-        }
-
-        // POST: Cars/AddPhoto/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult AddPhoto(int id, HttpPostedFileBase upload)
-        {
-            if (upload != null)
-            {
-                // получаем имя файла
-                string fileName = System.IO.Path.GetFileName(upload.FileName);
-                // сохраняем файл в папку Files в проекте
-                upload.SaveAs(Server.MapPath("~/Files/" + fileName));
-
-                Photo photo = new Photo();
-                photo.CarID = id;
-                photo.Path = fileName;
-                db.Photos.Add(photo);
-                db.SaveChanges();
-            }
-            return RedirectToAction("Index");
         }
 
         // GET: Cars/Edit/5
@@ -128,11 +53,21 @@ namespace InsuranceAgency.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Car car = db.Car.Find(id);
+            Car car = db.Car.Include(c => c.Photos)
+                            .First(c => c.ID == id);
             if (car == null)
             {
                 return HttpNotFound();
             }
+
+            List<byte[]> photos = new List<byte[]>();
+            foreach (Photo photo in car.Photos)
+            {
+                photos.Add(System.IO.File.ReadAllBytes(Server.MapPath("~/Files/" + id + "/" + photo.Path)));
+            }
+            ViewBag.Photos = photos;
+            ViewBag.PhotosInfo = car.Photos;
+
             return View(car);
         }
 
@@ -151,7 +86,7 @@ namespace InsuranceAgency.Controllers
                 {
                     db.Entry(car).State = EntityState.Modified;
                     db.SaveChanges();
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Details", "Cars", new { id = car.ID });
                 }
                 else
                 {
@@ -159,6 +94,50 @@ namespace InsuranceAgency.Controllers
                         ModelState.AddModelError("VIN", "Данный VIN номер уже используется");
                 }
             }
+            return View(car);
+        }
+
+        // GET: Cars/AddPhoto/5
+        public ActionResult AddPhoto(int? carID)
+        {
+            if (carID == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Car car = db.Car.Find(carID);
+            if (car == null)
+            {
+                return HttpNotFound();
+            }
+            return View(car);
+        }
+
+        // POST: Cars/AddPhoto/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddPhoto(int carID, HttpPostedFileBase upload)
+        {
+            if (upload != null)
+            {
+                // получаем имя файла
+                string fileName = Path.GetFileName(upload.FileName);
+
+                // сохраняем файл в папку Files в проекте
+                upload.SaveAs(Server.MapPath("~/Files/" + carID + "/" + fileName));
+
+                Photo photo = new Photo();
+                photo.CarID = carID;
+                photo.Path = fileName;
+                photo.UploadDate = DateTime.Now;
+                db.Photos.Add(photo);
+                db.SaveChanges();
+
+                return RedirectToAction("Edit", "Cars", new { id = carID });
+            }
+
+            ModelState.AddModelError("", "Выберите файл");
+            Car car = db.Car.Find(carID);
+
             return View(car);
         }
 
@@ -187,6 +166,40 @@ namespace InsuranceAgency.Controllers
             db.Car.Remove(car);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        // GET: Cars/DeletePhoto/5
+        [Authorize(Roles = "Administrator")]
+        public ActionResult DeletePhoto(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Photo photo = db.Photos.Include(p => p.Car)
+                                   .First(p => p.ID == id);
+            if (photo == null)
+            {
+                return HttpNotFound();
+            }
+
+            byte[] deletePhoto;
+            deletePhoto = System.IO.File.ReadAllBytes(Server.MapPath("~/Files/" + photo.CarID + "/" + photo.Path));
+            ViewBag.DeletePhoto = deletePhoto;
+
+            return View(photo);
+        }
+
+        // POST: Cars/DeletePhoto/5
+        [HttpPost, ActionName("DeletePhoto")]
+        [Authorize(Roles = "Administrator")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeletePhotoConfirmed(int id)
+        {
+            Photo photo = db.Photos.Find(id);
+            db.Photos.Remove(photo);
+            db.SaveChanges();
+            return RedirectToAction("Edit", "Cars", new { id = photo.CarID });
         }
 
 

@@ -10,77 +10,122 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
-<div class="form-horizontal">
-    <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    @Html.HiddenFor(model => model.ID)
 
-    @{
-        if (User.IsInRole("Administrator"))
-        {
-            <div class="form-group">
-                @Html.LabelFor(model => model.Model, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Model, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Model, "", new { @class = "text-danger" })
+    <div class="form-horizontal">
+        <hr />
+        @Html.HiddenFor(model => model.ID)
+
+        @{
+            if (User.IsInRole("Administrator"))
+            {
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Model, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Model, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Model, "", new { @class = "text-danger" })
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.VIN, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.VIN, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.VIN, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.VIN, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.VIN, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.VIN, "", new { @class = "text-danger" })
+                    </div>
                 </div>
-            </div>
 
+            }
+            if (User.IsInRole("Operator"))
+            {
+                @Html.Hidden("Model", Model.Model)
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Model, htmlAttributes: new { @class = "control-label col-sm-2" })
+                    <div class="col-sm-10">
+                        @Html.DisplayFor(model => model.Model)
+                    </div>
+                </div>
+
+                @Html.Hidden("VIN", Model.VIN)
+                <div class="form-group">
+                    @Html.LabelFor(model => model.VIN, htmlAttributes: new { @class = "control-label col-sm-2" })
+                    <div class="col-sm-10">
+                        @Html.DisplayFor(model => model.VIN)
+                    </div>
+                </div>
+            }
         }
-        if (User.IsInRole("Operator"))
-        {
-            @Html.Hidden("Model", Model.Model)
-            <div class="form-group">
-                @Html.LabelFor(model => model.Model, htmlAttributes: new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.DisplayFor(model => model.Model)
-                </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.RegistrationPlate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.RegistrationPlate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.RegistrationPlate, "", new { @class = "text-danger" })
             </div>
+        </div>
 
-            @Html.Hidden("VIN", Model.VIN)
-            <div class="form-group">
-                @Html.LabelFor(model => model.VIN, htmlAttributes: new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.DisplayFor(model => model.VIN)
-                </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.VehiclePassport, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.VehiclePassport, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.VehiclePassport, "", new { @class = "text-danger" })
             </div>
-        }
-    }
+        </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.RegistrationPlate, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.RegistrationPlate, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.RegistrationPlate, "", new { @class = "text-danger" })
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Сохранить" class="btn btn-primary" />
+            </div>
         </div>
     </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.VehiclePassport, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.VehiclePassport, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.VehiclePassport, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Сохранить" class="btn btn-default" />
-        </div>
-    </div>
-</div>
 }
 
 <div>
+    <br />
+    <h4>Галерея</h4>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayName("Дата загрузки")
+            </th>
+            <th>
+                @Html.DisplayName("Фото")
+            </th>
+            @if (User.IsInRole("Administrator"))
+            {
+                <th></th>
+            }
+        </tr>
+
+        @{int i = 0; }
+        @foreach (byte[] photo in ViewBag.Photos)
+        {
+            string uploadDate = (ViewBag.PhotosInfo as List<InsuranceAgency.Models.Photo>)[i].UploadDate.ToString("dd-MM-yyyy");
+            int ID = (ViewBag.PhotosInfo as List<InsuranceAgency.Models.Photo>)[i].ID;
+            <tr>
+                <td>
+                    @uploadDate
+                </td>
+                <td>
+                    <img width="200" src="data:image/jpeg;base64,@(Convert.ToBase64String(photo))">
+                </td>
+                @if (User.IsInRole("Administrator"))
+                {
+                    <td>
+                        @Html.ActionLink("Удалить", "DeletePhoto", new { id = @ID })
+                    </td>
+                }
+            </tr>
+
+            i++;
+        }
+
+    </table>
+</div>
+
+<div>
+    @Html.ActionLink("Добавить фото", "AddPhoto", new { carID = Model.ID }) |
     @Html.ActionLink("Вернуться к списку", "Index")
 </div>
 
