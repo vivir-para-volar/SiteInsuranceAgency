@@ -1,5 +1,4 @@
 ﻿@model IEnumerable<InsuranceAgency.Models.Car>
-
 @{
     ViewBag.Title = "Index";
 }
@@ -9,43 +8,43 @@
 <p>
     @Html.ActionLink("Добавить новый", "Create", "CreateCar")
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Model)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.VIN)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.RegistrationPlate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.VehiclePassport)
-        </th>
-        <th></th>
-    </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Model)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.VIN)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.RegistrationPlate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.VehiclePassport)
-        </td>
-        <td>
-            @Html.ActionLink("Редактировать", "Edit", new { id = item.ID }) |
-            @Html.ActionLink("Подробнее", "Details", new { id = item.ID }) |
-            @Html.ActionLink("Удалить", "Delete", new { id = item.ID })
-        </td>
-    </tr>
-}
-
+<table class="table" id="table-id">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>@Html.DisplayNameFor(model => model.Model)</th>
+            <th>@Html.DisplayNameFor(model => model.VIN)</th>
+            <th>@Html.DisplayNameFor(model => model.RegistrationPlate)</th>
+            <th>@Html.DisplayNameFor(model => model.VehiclePassport)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{ int i = 1;}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <th>@i</th>
+                <td>@Html.DisplayFor(modelItem => item.Model)</td>
+                <td>@Html.DisplayFor(modelItem => item.VIN)</td>
+                <td>@Html.DisplayFor(modelItem => item.RegistrationPlate)</td>
+                <td>@Html.DisplayFor(modelItem => item.VehiclePassport)</td>
+                <td>
+                    @Html.ActionLink("Редактировать", "Edit", new { id = item.ID }) |
+                    @Html.ActionLink("Подробнее", "Details", new { id = item.ID }) |
+                    @Html.ActionLink("Удалить", "Delete", new { id = item.ID })
+                </td>
+            </tr>
+            i++;
+        }
+    </tbody>
 </table>
+
+<script src="@Url.Content("~/Scripts/tablesort.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/tablesort.number.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/tablesort.date.js")" type="text/javascript"></script>
+
+<script>
+    new Tablesort(document.getElementById('table-id'));
+</script>

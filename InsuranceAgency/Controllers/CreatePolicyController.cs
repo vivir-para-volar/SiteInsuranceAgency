@@ -172,7 +172,7 @@ namespace InsuranceAgency.Controllers
 
             db.SaveChanges();
 
-            return RedirectToAction("Index", "Policies");
+            return RedirectToAction("Details", "Policies", new { id = policy.ID });
         }
 
         protected override void Dispose(bool disposing)

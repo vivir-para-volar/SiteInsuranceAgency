@@ -1,5 +1,4 @@
 ﻿@model InsuranceAgency.Models.ViewModels.AllInfoAboutInsuranceEvent
-
 @{
     ViewBag.Title = "Delete";
 }
@@ -7,32 +6,18 @@
 <h2>Удалить страховой случай</h2>
 
 <h3>Вы уверены, что хотите удалить данный страховой случай?</h3>
+
 <div>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.InsuranceEvent.Date)
-        </dt>
+        <dt>@Html.DisplayNameFor(model => model.InsuranceEvent.Date)</dt>
+        <dd>@Html.DisplayFor(model => model.InsuranceEvent.Date)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.InsuranceEvent.Date)
-        </dd>
+        <dt>@Html.DisplayNameFor(model => model.InsuranceEvent.InsurancePayment)</dt>
+        <dd>@Html.DisplayFor(model => model.InsuranceEvent.InsurancePayment)</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.InsuranceEvent.InsurancePayment)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.InsuranceEvent.InsurancePayment)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.InsuranceEvent.Description)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.InsuranceEvent.Description)
-        </dd>
+        <dt>@Html.DisplayNameFor(model => model.InsuranceEvent.Description)</dt>
+        <dd>@Html.DisplayFor(model => model.InsuranceEvent.Description)</dd>
     </dl>
 </div>
 
@@ -42,69 +27,29 @@
     <h4>Информация о полисе</h4>
 
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Policy.InsuranceType)
-        </dt>
+        <dt>@Html.DisplayNameFor(model => model.Policy.InsuranceType)</dt>
+        <dd>@Html.DisplayFor(model => model.Policy.InsuranceType)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Policy.InsuranceType)
-        </dd>
+        <dt>@Html.DisplayNameFor(model => model.Policy.InsurancePremium)</dt>
+        <dd>@Html.DisplayFor(model => model.Policy.InsurancePremium)</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Policy.InsurancePremium)
-        </dt>
+        <dt>@Html.DisplayNameFor(model => model.Policy.InsuranceAmount)</dt>
+        <dd>@Html.DisplayFor(model => model.Policy.InsuranceAmount)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Policy.InsurancePremium)
-        </dd>
+        <dt>@Html.DisplayNameFor(model => model.Policy.DateOfConclusion)</dt>
+        <dd>@Html.DisplayFor(model => model.Policy.DateOfConclusion)</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Policy.InsuranceAmount)
-        </dt>
+        <dt>@Html.DisplayNameFor(model => model.Policy.ExpirationDate)</dt>
+        <dd>@Html.DisplayFor(model => model.Policy.ExpirationDate)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Policy.InsuranceAmount)
-        </dd>
+        <dt>@Html.DisplayName("Страхователь")</dt>
+        <dd>@Html.DisplayFor(model => model.Policy.Policyholder.FullName)</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Policy.DateOfConclusion)
-        </dt>
+        <dt>@Html.DisplayName("Автомобиль")</dt>
+        <dd>@Html.DisplayFor(model => model.Policy.Car.Model)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Policy.DateOfConclusion)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Policy.ExpirationDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Policy.ExpirationDate)
-        </dd>
-
-        <dt>
-            @Html.DisplayName("Страхователь")
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Policy.Policyholder.FullName)
-        </dd>
-
-        <dt>
-            @Html.DisplayName("Автомобиль")
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Policy.Car.Model)
-        </dd>
-
-        <dt>
-            @Html.DisplayName("Сотрудник")
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Policy.Employee.FullName)
-        </dd>
+        <dt>@Html.DisplayName("Сотрудник")</dt>
+        <dd>@Html.DisplayFor(model => model.Policy.Employee.FullName)</dd>
     </dl>
 </div>
 
@@ -114,7 +59,7 @@
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Удалить" class="btn btn-default" /> |
+            <input type="submit" value="Удалить" class="btn btn-primary" /> |
             @Html.ActionLink("Вернуться к списку", "Index")
         </div>
     }

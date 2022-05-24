@@ -9,71 +9,47 @@
 <div>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Model)
-        </dt>
+        <dt>@Html.DisplayNameFor(model => model.Model)</dt>
+        <dd>@Html.DisplayFor(model => model.Model)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Model)
-        </dd>
+        <dt>@Html.DisplayNameFor(model => model.VIN)</dt>
+        <dd>@Html.DisplayFor(model => model.VIN)</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.VIN)
-        </dt>
+        <dt>@Html.DisplayNameFor(model => model.RegistrationPlate)</dt>
+        <dd>@Html.DisplayFor(model => model.RegistrationPlate)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.VIN)
-        </dd>
+        <dt>@Html.DisplayNameFor(model => model.VehiclePassport)</dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.RegistrationPlate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.RegistrationPlate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.VehiclePassport)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.VehiclePassport)
-        </dd>
-
+        <dd>@Html.DisplayFor(model => model.VehiclePassport)</dd>
     </dl>
 </div>
 
 <div>
     <br />
     <h4>Галерея</h4>
-    <table class="table">
-        <tr>
-            <th>
-                @Html.DisplayName("Дата загрузки")
-            </th>
-            <th>
-                @Html.DisplayName("Фото")
-            </th>
-            <th></th>
-        </tr>
-
-        @{int i = 0; }
-        @foreach (byte[] photo in ViewBag.Photos)
-        {
-            string uploadDate = (ViewBag.PhotosInfo as List<InsuranceAgency.Models.Photo>)[i].UploadDate.ToString("dd-MM-yyyy");
+    <table class="table" id="table-id">
+        <thead>
             <tr>
-                <td>
-                    @uploadDate
-                </td>
-                <td>
-                    <img width="200" src="data:image/jpeg;base64,@(Convert.ToBase64String(photo))">
-                </td>
+                <th>#</th>
+                <th>@Html.DisplayName("Дата загрузки")</th>
+                <th>@Html.DisplayName("Фото")</th>
             </tr>
+        </thead>
+        <tbody>
+            @{int i = 0; }
+            @foreach (byte[] photo in ViewBag.Photos)
+            {
+                string uploadDate = (ViewBag.PhotosInfo as List<InsuranceAgency.Models.Photo>)[i].UploadDate.ToString("dd-MM-yyyy");
 
-            i++; 
-        }
+                i++;
 
+                <tr>
+                    <th>@i</th>
+                    <td>@uploadDate</td>
+                    <td><img width="200" src="data:image/jpeg;base64,@(Convert.ToBase64String(photo))"></td>
+                </tr>
+            }
+        </tbody>
     </table>
 </div>
 
@@ -81,3 +57,11 @@
     @Html.ActionLink("Редактировать", "Edit", new { id = Model.ID }) |
     @Html.ActionLink("Вернуться к списку", "Index")
 </p>
+
+<script src="@Url.Content("~/Scripts/tablesort.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/tablesort.number.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/tablesort.date.js")" type="text/javascript"></script>
+
+<script>
+    new Tablesort(document.getElementById('table-id'));
+</script>

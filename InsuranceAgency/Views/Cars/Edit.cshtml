@@ -84,43 +84,40 @@
 <div>
     <br />
     <h4>Галерея</h4>
-    <table class="table">
-        <tr>
-            <th>
-                @Html.DisplayName("Дата загрузки")
-            </th>
-            <th>
-                @Html.DisplayName("Фото")
-            </th>
-            @if (User.IsInRole("Administrator"))
-            {
-                <th></th>
-            }
-        </tr>
-
-        @{int i = 0; }
-        @foreach (byte[] photo in ViewBag.Photos)
-        {
-            string uploadDate = (ViewBag.PhotosInfo as List<InsuranceAgency.Models.Photo>)[i].UploadDate.ToString("dd-MM-yyyy");
-            int ID = (ViewBag.PhotosInfo as List<InsuranceAgency.Models.Photo>)[i].ID;
+    <table class="table" id="table-id">
+        <thead>
             <tr>
-                <td>
-                    @uploadDate
-                </td>
-                <td>
-                    <img width="200" src="data:image/jpeg;base64,@(Convert.ToBase64String(photo))">
-                </td>
+                <th>#</th>
+                <th>@Html.DisplayName("Дата загрузки")</th>
+                <th>@Html.DisplayName("Фото")</th>
                 @if (User.IsInRole("Administrator"))
                 {
-                    <td>
-                        @Html.ActionLink("Удалить", "DeletePhoto", new { id = @ID })
-                    </td>
+                    <th></th>
                 }
             </tr>
+        </thead>
+        <tbody>
+            @{int i = 0; }
+            @foreach (byte[] photo in ViewBag.Photos)
+            {
+                string uploadDate = (ViewBag.PhotosInfo as List<InsuranceAgency.Models.Photo>)[i].UploadDate.ToString("dd-MM-yyyy");
+                int ID = (ViewBag.PhotosInfo as List<InsuranceAgency.Models.Photo>)[i].ID;
 
-            i++;
-        }
+                i++;
 
+                <tr>
+                    <th>@i</th>
+                    <td>@uploadDate</td>
+                    <td><img width="200" src="data:image/jpeg;base64,@(Convert.ToBase64String(photo))"></td>
+                    @if (User.IsInRole("Administrator"))
+                    {
+                        <td>
+                            @Html.ActionLink("Удалить", "DeletePhoto", new { id = @ID })
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
     </table>
 </div>
 
@@ -132,3 +129,11 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
+
+<script src="@Url.Content("~/Scripts/tablesort.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/tablesort.number.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/tablesort.date.js")" type="text/javascript"></script>
+
+<script>
+    new Tablesort(document.getElementById('table-id'));
+</script>

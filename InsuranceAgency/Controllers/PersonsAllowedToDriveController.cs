@@ -62,7 +62,7 @@ namespace InsuranceAgency.Controllers
                     if (fromCreatePolicy)
                         return RedirectToAction("ChoosePersonsAllowedToDrive", "CreatePolicy", new { policyID = policyID });
                     else
-                        return RedirectToAction("Index");
+                        return RedirectToAction("Details", "PersonsAllowedToDrive", new { id = personAllowedToDrive.ID });
                 }
                 else
                 {
@@ -104,7 +104,7 @@ namespace InsuranceAgency.Controllers
                 {
                     db.Entry(personAllowedToDrive).State = EntityState.Modified;
                     db.SaveChanges();
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Details", "PersonsAllowedToDrive", new { id = personAllowedToDrive.ID });
                 }
                 else
                 {

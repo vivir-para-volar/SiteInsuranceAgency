@@ -71,7 +71,7 @@ namespace InsuranceAgency.Controllers
                     if (fromCreatePolicy)
                         return RedirectToAction("Index", "CreatePolicy");
                     else
-                        return RedirectToAction("Index");
+                        return RedirectToAction("Details", "Policyholders", new { id = policyholder.ID });
                 }
                 else
                 {
@@ -183,7 +183,7 @@ namespace InsuranceAgency.Controllers
 
                     db.Entry(policyholder).State = EntityState.Modified;
                     db.SaveChanges();
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Details", "Policyholders", new { id = policyholder.ID });
                 }
                 else
                 {

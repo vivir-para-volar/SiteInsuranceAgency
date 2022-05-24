@@ -11,50 +11,47 @@
     @Html.ActionLink("Создать нового", "Create", "Policyholders", null, new { @class = "btn btn-info" })
 </div>
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.FullName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Birthday)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Telephone)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Passport)
-        </th>
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
+<table class="table" id="table-id">
+    <thead>
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FullName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Birthday)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Telephone)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Passport)
-            </td>
-            <td>
-                @using (Html.BeginForm())
-                {
-                    @Html.AntiForgeryToken()
-                    <div>
-                        @Html.Hidden("PolicyholderID", item.ID)
-                        <input type="submit" value="Выбрать" class="btn btn-primary" />
-                    </div>
-                }
-            </td>
+            <th>#</th>
+            <th>@Html.DisplayNameFor(model => model.FullName)</th>
+            <th>@Html.DisplayNameFor(model => model.Birthday)</th>
+            <th>@Html.DisplayNameFor(model => model.Telephone)</th>
+            <th>@Html.DisplayNameFor(model => model.Passport)</th>
+            <th></th>
         </tr>
-    }
-
+    </thead>
+    <tbody>
+        @{ int i = 1;}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <th>@i</th>
+                <td>@Html.DisplayFor(modelItem => item.FullName)</td>
+                <td>@Html.DisplayFor(modelItem => item.Birthday)</td>
+                <td>@Html.DisplayFor(modelItem => item.Telephone)</td>
+                <td>@Html.DisplayFor(modelItem => item.Passport)</td>
+                <td>
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+                        <div>
+                            @Html.Hidden("PolicyholderID", item.ID)
+                            <input type="submit" value="Выбрать" class="btn btn-primary" />
+                        </div>
+                    }
+                </td>
+            </tr>
+            i++;
+        }
+    </tbody>
 </table>
 
+<script src="@Url.Content("~/Scripts/tablesort.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/tablesort.number.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/tablesort.date.js")" type="text/javascript"></script>
+
+<script>
+    new Tablesort(document.getElementById('table-id'));
+</script>

@@ -49,6 +49,9 @@ namespace WebCinema.Controllers
         {
             if (ModelState.IsValid)
             {
+                model.UserName = model.UserName.Trim();
+                model.FullName = model.FullName.Trim();
+
                 var userWithSameName = userManager.FindByName(model.UserName);
                 if (userWithSameName != null)
                 {

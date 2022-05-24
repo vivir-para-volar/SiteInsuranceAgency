@@ -1,64 +1,53 @@
 ﻿@model IEnumerable<InsuranceAgency.Models.InsuranceEvent>
-
 @{
     ViewBag.Title = "Index";
 }
 
 <h2>Список страховых случаев</h2>
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Date)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.InsurancePayment)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Policy.InsuranceType)
-        </th>
-        <th>
-            @Html.DisplayName("Страхователь")
-        </th>
-        <th>
-            @Html.DisplayName("Автомобиль")
-        </th>
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
+<table class="table" id="table-id">
+    <thead>
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.InsurancePayment)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Policy.InsuranceType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Policy.Policyholder.FullName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Policy.Car.Model)
-            </td>
-            <td>
-                @Html.ActionLink("Подробнее", "Details", new { id = item.ID })
-                @if (User.IsInRole("Administrator"))
-                {
-                    <span> | </span>
-                    @Html.ActionLink("Удалить", "Delete", new { id = item.ID })
-                }
-            </td>
+            <th>#</th>
+            <th>@Html.DisplayNameFor(model => model.Date)</th>
+            <th>@Html.DisplayNameFor(model => model.InsurancePayment)</th>
+            <th>@Html.DisplayNameFor(model => model.Description)</th>
+            <th>@Html.DisplayNameFor(model => model.Policy.InsuranceType)</th>
+            <th>@Html.DisplayName("Страхователь")</th>
+            <th>@Html.DisplayName("Автомобиль")</th>
+            <th></th>
         </tr>
-    }
-
+    </thead>
+    <tbody>
+        @{ int i = 1;}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <th>@i</th>
+                <td>@Html.DisplayFor(modelItem => item.Date)</td>
+                <td>@Html.DisplayFor(modelItem => item.InsurancePayment)</td>
+                <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                <td>@Html.DisplayFor(modelItem => item.Policy.InsuranceType)</td>
+                <td>@Html.DisplayFor(modelItem => item.Policy.Policyholder.FullName)</td>
+                <td>@Html.DisplayFor(modelItem => item.Policy.Car.Model)</td>
+                <td>
+                    @Html.ActionLink("Подробнее", "Details", new { id = item.ID })
+                    @if (User.IsInRole("Administrator"))
+                    {
+                        <span> | </span>
+                        @Html.ActionLink("Удалить", "Delete", new { id = item.ID })
+                    }
+                </td>
+            </tr>
+            i++;
+        }
+    </tbody>
 </table>
+
+<script src="@Url.Content("~/Scripts/tablesort.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/tablesort.number.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/tablesort.date.js")" type="text/javascript"></script>
+
+<script>
+    new Tablesort(document.getElementById('table-id'));
+</script>

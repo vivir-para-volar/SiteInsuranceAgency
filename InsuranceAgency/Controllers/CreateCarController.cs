@@ -111,10 +111,20 @@ namespace InsuranceAgency.Controllers
             }
 
             ModelState.AddModelError("", "Выберите файл");
-            Car car = db.Car.Find(carID);
+
+            Car car = db.Car.Include(c => c.Photos)
+                            .First(c => c.ID == carID);
 
             ViewBag.FromCreatePolicy = fromCreatePolicy;
             ViewBag.PolicyholderID = policyholderID;
+
+            List<byte[]> photos = new List<byte[]>();
+            foreach (Photo photo in car.Photos)
+            {
+                photos.Add(System.IO.File.ReadAllBytes(Server.MapPath("~/Files/" + carID + "/" + photo.Path)));
+            }
+            ViewBag.Photos = photos;
+            ViewBag.PhotosInfo = car.Photos;
 
             return View(car);
         }
@@ -123,10 +133,32 @@ namespace InsuranceAgency.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EndCreate(int carID, bool fromCreatePolicy, int policyholderID)
         {
-            if (fromCreatePolicy)
-                return RedirectToAction("ChooseCar", "CreatePolicy", new { policyholderID = policyholderID });
-            else
-                return RedirectToAction("Details", "Cars", new { id = carID });
+            Car car = db.Car.Include(c => c.Photos)
+                            .First(c => c.ID == carID);
+            int count = car.Photos.Count();
+
+            if (count != 0)
+            {
+                if (fromCreatePolicy)
+                    return RedirectToAction("ChooseCar", "CreatePolicy", new { policyholderID = policyholderID });
+                else
+                    return RedirectToAction("Details", "Cars", new { id = carID });
+            }
+
+            ModelState.AddModelError("", "Добавьте хотя бы одну фотографию");
+
+            ViewBag.FromCreatePolicy = fromCreatePolicy;
+            ViewBag.PolicyholderID = policyholderID;
+
+            List<byte[]> photos = new List<byte[]>();
+            foreach (Photo photo in car.Photos)
+            {
+                photos.Add(System.IO.File.ReadAllBytes(Server.MapPath("~/Files/" + carID + "/" + photo.Path)));
+            }
+            ViewBag.Photos = photos;
+            ViewBag.PhotosInfo = car.Photos;
+
+            return View("AddPhoto", car);
         }
 
         protected override void Dispose(bool disposing)

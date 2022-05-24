@@ -51,6 +51,7 @@ namespace InsuranceAgency.Controllers
             if (ModelState.IsValid)
             {
                 createEmployee.FullName = createEmployee.FullName.Trim();
+                createEmployee.Login = createEmployee.Login.Trim();
 
                 int countTelephone = db.Employees.Where(e => e.Telephone == createEmployee.Telephone).Count();
                 int countEmail = db.Employees.Where(e => e.Email == createEmployee.Email).Count();
@@ -106,7 +107,7 @@ namespace InsuranceAgency.Controllers
                     db.Employees.Add(employee);
                     db.SaveChanges();
 
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Details", "Employees", new { id = employee.ID });
                 }
                 else
                 {
@@ -185,7 +186,7 @@ namespace InsuranceAgency.Controllers
                     db.Entry(employee).State = EntityState.Modified;
                     db.SaveChanges();
 
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Details", "Employees", new { id = employee.ID });
                 }
                 else
                 {

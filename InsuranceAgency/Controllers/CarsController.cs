@@ -165,6 +165,10 @@ namespace InsuranceAgency.Controllers
             Car car = db.Car.Find(id);
             db.Car.Remove(car);
             db.SaveChanges();
+
+            string directory = Server.MapPath("~/Files/") + id;
+            Directory.Delete(directory, true);
+
             return RedirectToAction("Index");
         }
 
@@ -197,8 +201,11 @@ namespace InsuranceAgency.Controllers
         public ActionResult DeletePhotoConfirmed(int id)
         {
             Photo photo = db.Photos.Find(id);
+            System.IO.File.Delete(Server.MapPath("~/Files/" + photo.CarID + "/" + photo.Path));
+
             db.Photos.Remove(photo);
             db.SaveChanges();
+
             return RedirectToAction("Edit", "Cars", new { id = photo.CarID });
         }
 

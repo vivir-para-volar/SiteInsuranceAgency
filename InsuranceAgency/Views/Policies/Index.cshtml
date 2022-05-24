@@ -1,5 +1,4 @@
 ﻿@model IEnumerable<InsuranceAgency.Models.Policy>
-
 @{
     ViewBag.Title = "Index";
 }
@@ -13,81 +12,63 @@
     </p>
 }
 
-<table class="table table-bordered">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.InsuranceType)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.InsurancePremium)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.InsuranceAmount)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DateOfConclusion)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ExpirationDate)
-        </th>
-        <th>
-            @Html.DisplayName("Страхователь")
-        </th>
-        <th>
-            @Html.DisplayName("Автомобиль")
-        </th>
-        <th>
-            @Html.DisplayName("Сотрудник")
-        </th>
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
+<table class="table" id="table-id">
+    <thead>
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.InsuranceType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.InsurancePremium)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.InsuranceAmount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateOfConclusion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ExpirationDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Policyholder.FullName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Car.Model)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Employee.FullName)
-            </td>
-
-            @if (User.IsInRole("User"))
-            {
-                <td>
-                    @Html.ActionLink("Подробнее", "Details", new { id = item.ID })
-                </td>
-            }
-            else
-            {
-                <td>
-                    @Html.ActionLink("Редактировать", "Edit", new { id = item.ID }) |
-                    @Html.ActionLink("Подробнее", "Details", new { id = item.ID })
-                    @if (User.IsInRole("Administrator"))
-                    {
-                        <span> | </span>
-                        @Html.ActionLink("Удалить", "Delete", new { id = item.ID })
-                    }
-                </td>
-            }
+            <th>#</th>
+            <th>@Html.DisplayNameFor(model => model.InsuranceType)</th>
+            <th>@Html.DisplayNameFor(model => model.InsurancePremium)</th>
+            <th>@Html.DisplayNameFor(model => model.InsuranceAmount)</th>
+            <th>@Html.DisplayNameFor(model => model.DateOfConclusion)</th>
+            <th>@Html.DisplayNameFor(model => model.ExpirationDate)</th>
+            <th>@Html.DisplayName("Страхователь")</th>
+            <th>@Html.DisplayName("Автомобиль")</th>
+            <th>@Html.DisplayName("Сотрудник")</th>
+            <th></th>
         </tr>
-    }
+    </thead>
+    <tbody>
+        @{ int i = 1;}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <th>@i</th>
+                <td>@Html.DisplayFor(modelItem => item.InsuranceType)</td>
+                <td>@Html.DisplayFor(modelItem => item.InsurancePremium)</td>
+                <td>@Html.DisplayFor(modelItem => item.InsuranceAmount)</td>
+                <td>@Html.DisplayFor(modelItem => item.DateOfConclusion)</td>
+                <td>@Html.DisplayFor(modelItem => item.ExpirationDate)</td>
+                <td>@Html.DisplayFor(modelItem => item.Policyholder.FullName)</td>
+                <td>@Html.DisplayFor(modelItem => item.Car.Model)</td>
+                <td>@Html.DisplayFor(modelItem => item.Employee.FullName)</td>
+                @if (User.IsInRole("User"))
+                {
+                    <td>
+                        @Html.ActionLink("Подробнее", "Details", new { id = item.ID })
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        @Html.ActionLink("Редактировать", "Edit", new { id = item.ID }) |
+                        @Html.ActionLink("Подробнее", "Details", new { id = item.ID })
+                        @if (User.IsInRole("Administrator"))
+                        {
+                            <span> | </span>
+                            @Html.ActionLink("Удалить", "Delete", new { id = item.ID })
+                        }
+                    </td>
+                }
+            </tr>
+            i++;
+        }
+    </tbody>
 </table>
+
+<script src="@Url.Content("~/Scripts/tablesort.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/tablesort.number.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/tablesort.date.js")" type="text/javascript"></script>
+
+<script>
+    new Tablesort(document.getElementById('table-id'));
+</script>

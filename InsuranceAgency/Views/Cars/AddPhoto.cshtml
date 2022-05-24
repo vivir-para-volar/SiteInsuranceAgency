@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "AddPhoto";
 }
+
 <h2>Добавление фотографии автомобиля</h2>
 
 @using (Html.BeginForm("AddPhoto", "Cars", FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -13,13 +14,8 @@
         <hr />
 
         <dl class="dl-horizontal">
-            <dt>
-                @Html.DisplayName("Автомобиль")
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Model)
-            </dd>
+            <dt>@Html.DisplayName("Автомобиль")</dt>
+            <dd>@Html.DisplayFor(model => model.Model)</dd>
         </dl>
 
         @Html.Hidden("FromCreatePolicy", ViewBag.FromCreatePolicy as string)
@@ -44,4 +40,3 @@
 <div>
     @Html.ActionLink("Вернуться", "Edit", new {id = Model.ID})
 </div>
-

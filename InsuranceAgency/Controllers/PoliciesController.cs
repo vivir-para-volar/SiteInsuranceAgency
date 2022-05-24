@@ -121,7 +121,7 @@ namespace InsuranceAgency.Controllers
                 {
                     db.Entry(policy).State = EntityState.Modified;
                     db.SaveChanges();
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Details", "Policies", new { id = policy.ID });
                 }
             }
 
