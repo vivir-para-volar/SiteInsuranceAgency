@@ -6,6 +6,7 @@ namespace InsuranceAgency.Controllers
     {
         public ActionResult Index()
         {
+            ViewBag.MainPhoto = System.IO.File.ReadAllBytes(Server.MapPath("~/fonts/main.webp"));
             return View();
         }
     }

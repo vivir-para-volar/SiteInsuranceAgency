@@ -297,6 +297,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="fonts\main.jpg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
@@ -305,6 +306,7 @@
     <Content Include="Content\Reports\PoliciesReport.xlsx" />
     <Content Include="Content\Reports\Report.xlsx" />
     <Content Include="Content\Reports\ReportAll.xlsx" />
+    <Content Include="fonts\main.webp" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

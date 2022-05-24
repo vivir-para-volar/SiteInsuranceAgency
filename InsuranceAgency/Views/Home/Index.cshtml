@@ -2,23 +2,15 @@
     ViewBag.Title = "Home Page";
 }
 
-<div class="row">
-    <div class="container">
-        @*@if (Request.IsAuthenticated && !(User.IsInRole("User")))
-        {
-            <ul class="list-group">
-                <li>@Html.ActionLink("Автомобили", "Index", "Cars")</li>
-                <li>@Html.ActionLink("Сотрудники", "Index", "Employees")</li>
-                <li>@Html.ActionLink("Страховые случаи", "Index", "InsuranceEvents")</li>
-                <li>@Html.ActionLink("Лица допущенные к управлению", "Index", "PersonsAllowedToDrive")</li>
-                <li>@Html.ActionLink("Фотографии", "Index", "Photos")</li>
-                <li>@Html.ActionLink("Полисы", "Index", "Policies")</li>
-                <li>@Html.ActionLink("Страхователи", "Index", "Policyholders")</li>
-            </ul>
-        }
-        else
-        {
-            <p>Информация не доступна</p>
-        }*@
+<header>
+    <br />
+    <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light">
+        <div class="col-lg-5 p-lg-5 mx-auto my-5">
+            <h1 class="display-4 font-weight-normal">Страховая компания</h1>
+            <br />
+            <p class="lead font-weight-normal">Наша миссия – создавать доверие между людьми.</p>
+            <p class="lead font-weight-normal">Каждый день мы работаем над тем, чтобы оправдать доверие наших клиентов и помочь им избавиться от тревог и подозрительности. Мы хотим на своём примере показать, что доверие порождает доверие.</p>
+        </div>
+        <img src="data:image/jpeg;base64,@(Convert.ToBase64String(ViewBag.MainPhoto))" class="img-thumbnail">
     </div>
-</div>
+</header>
