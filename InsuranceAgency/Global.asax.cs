@@ -37,6 +37,9 @@ namespace InsuranceAgency
                 MyIdentityRole newRole = new MyIdentityRole("User", "Пользователи могут только смотреть свои данные в системе");
                 roleManager.Create(newRole);
             }
+
+            Jobs.MailSchedule.StartReportsSchedule();
+            Jobs.MailSchedule.StartUsersSchedule();
         }
     }
 }

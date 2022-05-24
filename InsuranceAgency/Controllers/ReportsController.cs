@@ -91,7 +91,7 @@ namespace InsuranceAgency.Controllers
                     startLine++;
                 }
 
-                //созраняем в новое место
+                //сохраняем в новое место
                 excelPackage.SaveAs(fi_report);
             }
 
@@ -150,7 +150,7 @@ namespace InsuranceAgency.Controllers
                     startLine++;
                 }
 
-                //созраняем в новое место
+                //сохраняем в новое место
                 excelPackage.SaveAs(fi_report);
             }
 
@@ -228,7 +228,7 @@ namespace InsuranceAgency.Controllers
                     worksheet.Cells[startLine, 3].Value = sumInsurancePayment;
                 }
 
-                //созраняем в новое место
+                //сохраняем в новое место
                 excelPackage.SaveAs(fi_report);
             }
 
