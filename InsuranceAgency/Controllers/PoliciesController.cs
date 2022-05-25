@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
@@ -83,6 +84,8 @@ namespace InsuranceAgency.Controllers
             {
                 return HttpNotFound();
             }
+
+            ViewBag.LastExpirationDate = policy.ExpirationDate;
             return View(policy);
         }
 
@@ -90,7 +93,7 @@ namespace InsuranceAgency.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator, Operator")]
-        public ActionResult Edit([Bind(Include = "ID,InsuranceType,InsurancePremium,InsuranceAmount,DateOfConclusion,ExpirationDate,PolicyholderID,CarID,EmployeeID")] Policy policy)
+        public ActionResult Edit([Bind(Include = "ID,InsuranceType,InsurancePremium,InsuranceAmount,DateOfConclusion,ExpirationDate,PolicyholderID,CarID,EmployeeID")] Policy policy, DateTime lastExpirationDate)
         {
             if (ModelState.IsValid)
             {
@@ -116,6 +119,11 @@ namespace InsuranceAgency.Controllers
                     ModelState.AddModelError("ExpirationDate", "Дата окончания действия не может быть меньше Даты заключения");
                     flag = false;
                 }
+                if (policy.ExpirationDate > lastExpirationDate)
+                {
+                    ModelState.AddModelError("ExpirationDate", "Дата окончания действия нельзя увеличить");
+                    flag = false;
+                }
 
                 if (flag)
                 {
@@ -125,6 +133,7 @@ namespace InsuranceAgency.Controllers
                 }
             }
 
+            ViewBag.LastExpirationDate = lastExpirationDate;
             Policy policyError = db.Policies.Include(p => p.Car)
                                             .Include(p => p.Employee)
                                             .Include(p => p.Policyholder)
