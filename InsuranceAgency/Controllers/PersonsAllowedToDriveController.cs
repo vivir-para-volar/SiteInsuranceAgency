@@ -109,7 +109,7 @@ namespace InsuranceAgency.Controllers
                 else
                 {
                     if (countDrivingLicence > 0)
-                        ModelState.AddModelError("Telephone", "Данный телефон уже используется");
+                        ModelState.AddModelError("DrivingLicence", "Данное водительское удостоверение уже используется");
                 }
             }
             return View(personAllowedToDrive);

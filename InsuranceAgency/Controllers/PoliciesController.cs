@@ -187,6 +187,7 @@ namespace InsuranceAgency.Controllers
             if (listPersonsAllowedToDrive.Count == 0)
             {
                 ViewBag.PolicyID = policyID;
+                ViewBag.PersonsAllowedToDrive = policy.PersonsAllowedToDrive;
                 ModelState.AddModelError("Error", "Выберите хотя бы одно лицо, допущенное к управлению");
                 return View(db.PersonAllowedToDrives.ToList());
             }

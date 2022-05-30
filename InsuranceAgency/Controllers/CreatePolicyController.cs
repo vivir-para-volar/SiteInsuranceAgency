@@ -15,13 +15,11 @@ namespace InsuranceAgency.Controllers
     {
         private AgencyDBContext db = new AgencyDBContext();
 
-        // GET: CreatePolicy
         public ActionResult Index()
         {
             return View(db.Policyholders.ToList());
         }
 
-        // POST: CreatePolicy/ChooseCar
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Index(int policyholderID)

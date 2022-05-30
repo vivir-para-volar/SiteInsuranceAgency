@@ -80,19 +80,9 @@ namespace InsuranceAgency.Controllers
             {
                 car.Model = car.Model.Trim();
 
-                int countVIN = db.Car.Where(c => c.VIN == car.VIN && c.ID != car.ID).Count();
-
-                if (countVIN == 0)
-                {
-                    db.Entry(car).State = EntityState.Modified;
-                    db.SaveChanges();
-                    return RedirectToAction("Details", "Cars", new { id = car.ID });
-                }
-                else
-                {
-                    if (countVIN > 0)
-                        ModelState.AddModelError("VIN", "Данный VIN номер уже используется");
-                }
+                db.Entry(car).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Details", "Cars", new { id = car.ID });
             }
             return View(car);
         }

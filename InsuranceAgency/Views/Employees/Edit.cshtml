@@ -23,11 +23,11 @@
             </div>
         </div>
 
+        @Html.Hidden("Birthday", Model.Birthday.ToString("yyyy-MM-dd"))
         <div class="form-group">
             @Html.LabelFor(model => model.Birthday, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <input type="date" value="@Model.Birthday.ToString("yyyy-MM-dd")" name="Birthday" class="form-control">
-                @Html.ValidationMessageFor(model => model.Birthday, "", new { @class = "text-danger" })
+                @Html.DisplayFor(model => model.Birthday)
             </div>
         </div>
 
